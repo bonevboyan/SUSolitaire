@@ -1,24 +1,36 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
-    private String firstname;
-    private String lastname;
+    private String username;
+    private List<Result> result;
 
     public User() {
         // empty constructor
     }
 
-    public User(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    public User(String username) {
+        this.username = username;
+        this.result = new ArrayList<>();
+    }
+
+    public User(String username, Result result) {
+        this(username);
+        this.result.add(result);
     }
 
     // getters
-    public String getFirstname() {
-        return firstname;
+    public String getUsername() {
+        return username;
     }
 
-    public String getLastname() {
-        return lastname;
+    public List<Result> getResult() {
+        return result;
+    }
+
+    public void addResult(Result result) {
+        this.result.add(result);
     }
 }
