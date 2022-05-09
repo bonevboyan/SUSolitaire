@@ -1,12 +1,12 @@
 package Model;
 
 public class Result {
+    private String username;
     private int score;
-    private GameMode mode;
 
-    public Result(int score, GameMode mode) {
+    public Result(int score, String username) {
         this.score = score;
-        this.mode = mode;
+        this.username = username;
     }
 
     public int getScore() {
@@ -17,11 +17,11 @@ public class Result {
         this.score = score;
     }
 
-    public GameMode getMode() {
-        return mode;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMode(GameMode mode) {
-        this.mode = mode;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

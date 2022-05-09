@@ -7,6 +7,7 @@ import View.UserDetails;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 
 public class UserController {
     // database file
@@ -36,14 +37,18 @@ public class UserController {
                 return;
             }*/
             
-            this.database.addUser(new User(firstname));
-            this.database.saveUser(new File(databaseFile));
+            this.database.addUser(new User(firstname, 100));
+            this.database.saveUser();
             this.form.reset(true);
         });
 
         // load users
         this.form.viewUsers(e -> {
-            this.userDetails.getUsers(this.database.loadUsers(new File(databaseFile)));
+            try {
+                this.userDetails.getUsers(this.database.loadUsers(new File(databaseFile)));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }

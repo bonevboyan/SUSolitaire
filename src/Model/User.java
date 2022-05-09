@@ -5,20 +5,11 @@ import java.util.List;
 
 public class User {
     private String username;
-    private List<Result> result;
+    private int result;
 
-    public User() {
-        // empty constructor
-    }
-
-    public User(String username) {
+    public User(String username, int result) {
         this.username = username;
-        this.result = new ArrayList<>();
-    }
-
-    public User(String username, Result result) {
-        this(username);
-        this.result.add(result);
+        this.result = result;
     }
 
     // getters
@@ -26,11 +17,15 @@ public class User {
         return username;
     }
 
-    public List<Result> getResult() {
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getResult() {
         return result;
     }
 
-    public void addResult(Result result) {
-        this.result.add(result);
+    public void setResult(int result) {
+        this.result = result;
     }
 }

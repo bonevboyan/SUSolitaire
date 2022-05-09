@@ -1,7 +1,10 @@
 package Model;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Database {
 
@@ -17,42 +20,57 @@ public class Database {
     }
 
     // saves user to database file
-    public void saveUser(File file) {
-        try {
-            // user model
-            User user;
-            String save_data = "";
+    public void saveUser() {
+        try{
 
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true));
-            int i = 0;
-            while( i < userArrayList.size()) {
-                user = userArrayList.get(i);
-                save_data = user.getUsername() /*+ ", " + user.getLastname()*/;
-                i++;
+            StringBuilder text = new StringBuilder(getUsersString());
+            for (User user : userArrayList) {
+                text.append(" ").append(user.getUsername()).append(",").append(user.getResult());
             }
-            bufferedWriter.write(save_data);
-            bufferedWriter.newLine();
-            // prevents memory leak
-            bufferedWriter.close();
+            sendNewData(text.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     // reads user from database file
-    public Object[] loadUsers(File file) {
+    public Object[] loadUsers(File file) throws IOException {
         Object[] objects;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            // each lines to array
-            objects = bufferedReader.lines().toArray();
-            bufferedReader.close();
-            return objects;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        String text = getUsersString();
+
+        objects = text.split(" ");
+
+        return objects;
     }
 
+    private String getUsersString() throws IOException {
+        String command = "curl \\\n" +
+                "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
+                "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
+        Process process = Runtime.getRuntime().exec(command);
+        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
+        Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
+        Matcher m = r.matcher(json);
+
+        if (m.find()) {
+            return m.group(1);
+        } else {
+            return "";
+        }
+    }
+
+    private void sendNewData(String newContent) throws IOException {
+        String command = """
+                curl --fail --request PATCH --header 'Content-Type: application/text' \\
+                --data '{"files":{"data.txt":{
+                      "content": "cock,1123 big,123321231"
+                    }}}' \\
+                --header 'Authorization: token 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' \\
+                -- \\
+                https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9""";
+        Process process = Runtime.getRuntime().exec(command);
+
+        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
 }
