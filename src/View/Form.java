@@ -14,8 +14,12 @@ public class Form extends JPanel {
 
     public Form() {
         JLabel title = new JLabel("SUSolitaire");
+        title.setForeground(Color.white);
+
+        setBackground(new Color(0, 81, 0));
 
         JLabel usernameLabel = new JLabel("Username: ");
+        usernameLabel.setForeground(Color.white);
         //JLabel lastnameLabel = new JLabel("Last Name: ");
 
         usernameField = new JTextField(25);

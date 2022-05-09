@@ -7,4 +7,5 @@ public class App {
         // runs in AWT thread
         SwingUtilities.invokeLater(MainFrame::new);
     }
+
 }
