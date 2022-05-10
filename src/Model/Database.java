@@ -1,6 +1,8 @@
 package Model;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -61,16 +63,21 @@ public class Database {
     }
 
     private void sendNewData(String newContent) throws IOException {
-        String command = """
-                curl --fail --request PATCH --header 'Content-Type: application/text' \\
-                --data '{"files":{"data.txt":{
-                      "content": "cock,1123 big,123321231"
-                    }}}' \\
-                --header 'Authorization: token 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' \\
-                -- \\
-                https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9""";
-        Process process = Runtime.getRuntime().exec(command);
+        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        HttpURLConnection http = (HttpURLConnection)url.openConnection();
+        http.setRequestMethod("POST");
+        http.setDoOutput(true);
+        http.setRequestProperty("Content-Type", "application/json");
+        http.setRequestProperty("Authorization", "token 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");
 
-        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        String data = "{\n  \"files\": {\n    \"data.txt\": {\n      \"content\": \"" + newContent + "\"\n    }\n  }\n}";
+
+        byte[] out = data.getBytes(StandardCharsets.UTF_8);
+
+        OutputStream stream = http.getOutputStream();
+        stream.write(out);
+
+        System.out.println(http.getResponseCode() + " " + http.getResponseMessage());
+        http.disconnect();
     }
 }
