@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,11 +37,21 @@ public class Database {
     }
 
     // reads user from database file
-    public Object[] loadUsers(File file) throws IOException {
+    public Object[] loadUsers() throws IOException {
         Object[] objects;
         String text = getUsersString();
 
         objects = text.split(" ");
+
+        return objects;
+    }
+
+    // reads user from database file
+    public Object[] topScores() throws IOException {
+        Object[] objects;
+        String text = getUsersString();
+
+        objects = Arrays.stream(text.split(" ")).limit(5).toArray();
 
         return objects;
     }

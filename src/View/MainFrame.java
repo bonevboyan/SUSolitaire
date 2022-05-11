@@ -13,19 +13,19 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("SUSolitaire");
         cardLayout = new CardLayout();
-        Form form = new Form();
+        StartMenu startMenu = new StartMenu();
         UserDetails userDetails = new UserDetails();
         // sets our layout as a card layout
         setLayout(cardLayout);
 
         // initialize user controller
-        new UserController(form, userDetails);
+        new UserController(startMenu, userDetails);
 
         // adds view to card layout with unique constraints
-        add(form, "form");
+        add(startMenu, "form");
         add(userDetails, "user details");
         // switch view according to its constraints on click
-        form.viewUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "user details"));
+        startMenu.viewUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "user details"));
         userDetails.backButton(e -> cardLayout.show(MainFrame.this.getContentPane(), "form"));
 
         // icon for our application

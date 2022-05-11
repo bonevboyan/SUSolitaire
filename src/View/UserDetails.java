@@ -10,7 +10,7 @@ public class UserDetails extends JPanel {
     // Table for user data
     private JTable userTable;
     // table column
-    private String[] userTableColumn = {"FIRST NAME", "LAST NAME"};
+    private String[] userTableColumn = {"FIRST NAME", "SCORE"};
 
     // back button
     private JButton backButton;

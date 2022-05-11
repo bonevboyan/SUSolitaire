@@ -2,7 +2,7 @@ package Controller;
 
 import Model.Database;
 import Model.User;
-import View.Form;
+import View.StartMenu;
 import View.UserDetails;
 
 import javax.swing.*;
@@ -10,25 +10,23 @@ import java.io.File;
 import java.io.IOException;
 
 public class UserController {
-    // database file
-    private String databaseFile = "src\\data\\database.txt";
     private Database database;
-    private Form form;
+    private StartMenu startMenu;
     private UserDetails userDetails;
 
-    public UserController(Form form, UserDetails userDetails) {
+    public UserController(StartMenu startMenu, UserDetails userDetails) {
         this.database = new Database();
-        this.form = form;
+        this.startMenu = startMenu;
         this.userDetails = userDetails;
 
         // submit user
-        this.form.submitUsers(e -> {
-            String firstname = this.form.getUsername().trim();
+        this.startMenu.submitUsers(e -> {
+            String firstname = this.startMenu.getUsername().trim();
             //String lastname = this.form.getLastname().trim();
 
             // simple validations
             if(firstname.isEmpty()) {
-                JOptionPane.showMessageDialog(this.form, "Username Required.", "Error",
+                JOptionPane.showMessageDialog(this.startMenu, "Username Required.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             } /*else if(lastname.isEmpty()) {
@@ -39,16 +37,22 @@ public class UserController {
             
             this.database.addUser(new User(firstname, 100));
             this.database.saveUser();
-            this.form.reset(true);
+            this.startMenu.reset(true);
         });
 
         // load users
-        this.form.viewUsers(e -> {
+        this.startMenu.viewUsers(e -> {
             try {
-                this.userDetails.getUsers(this.database.loadUsers(new File(databaseFile)));
+                this.userDetails.getUsers(this.database.loadUsers());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
+
+        try {
+            this.startMenu.topScores(this.database.topScores());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
