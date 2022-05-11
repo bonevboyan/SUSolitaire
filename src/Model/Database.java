@@ -88,7 +88,6 @@ public class Database {
         OutputStream stream = http.getOutputStream();
         stream.write(out);
 
-        System.out.println(http.getResponseCode() + " " + http.getResponseMessage());
         http.disconnect();
     }
 }

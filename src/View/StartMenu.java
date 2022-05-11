@@ -1,13 +1,11 @@
 package View;
 
-import Model.Score;
-import View.Extensions.JPlaceholderTextField;
+import View.UIElements.JPlaceholderTextField;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class StartMenu extends JPanel {
     private JPlaceholderTextField usernameField;
@@ -95,7 +93,7 @@ public class StartMenu extends JPanel {
     }
 
     public void submitUsers(ActionListener actionListener) {
-        playButton.addActionListener(actionListener);
+            playButton.addActionListener(actionListener);
     }
 
     public void viewUsers(ActionListener actionListener) {

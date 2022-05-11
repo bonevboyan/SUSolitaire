@@ -15,6 +15,7 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         StartMenu startMenu = new StartMenu();
         UserDetails userDetails = new UserDetails();
+        GameSelectionScreen gameSelectionScreen = new GameSelectionScreen();
         // sets our layout as a card layout
         setLayout(cardLayout);
 
@@ -24,9 +25,12 @@ public class MainFrame extends JFrame {
         // adds view to card layout with unique constraints
         add(startMenu, "form");
         add(userDetails, "user details");
+        add(gameSelectionScreen, "game selection");
         // switch view according to its constraints on click
         startMenu.viewUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "user details"));
+        startMenu.submitUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "game selection"));
         userDetails.backButton(e -> cardLayout.show(MainFrame.this.getContentPane(), "form"));
+        gameSelectionScreen.backButton(e -> cardLayout.show(MainFrame.this.getContentPane(), "form"));
 
         // icon for our application
         ImageIcon imageIcon = new ImageIcon("src/assets/appicon.png");

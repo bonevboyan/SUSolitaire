@@ -34,7 +34,7 @@ public class UserController {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }*/
-            
+
             this.database.addUser(new User(firstname, 100));
             this.database.saveUser();
             this.startMenu.reset(true);

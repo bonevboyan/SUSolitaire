@@ -1,4 +1,4 @@
-package View.Extensions;
+package View.UIElements;
 
 import java.awt.*;
 
