@@ -15,7 +15,7 @@ public class CreditsScreen extends JPanel {
         setLayout(new GridBagLayout());
 
         gridBagConstraints.fill = GridBagConstraints.NONE;
-        Insets defaultInsets = new Insets(0, 0, 10, 0);
+        Insets defaultInsets = new Insets(0, 0, 30, 0);
 
         title = new JLabel("Credits");
         title.setFont(new Font("", Font.BOLD, 40));
@@ -23,7 +23,7 @@ public class CreditsScreen extends JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new Insets(0, 0, 30, 0);
+        gridBagConstraints.insets = defaultInsets;
         add(title, gridBagConstraints);
 
         creditsText = new JLabel("<html>Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. " +
