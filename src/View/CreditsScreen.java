@@ -18,7 +18,7 @@ public class CreditsScreen extends JPanel {
         Insets defaultInsets = new Insets(0, 0, 10, 0);
 
         title = new JLabel("Credits");
-        title.setFont(new Font("", Font.ITALIC, 40));
+        title.setFont(new Font("", Font.BOLD, 40));
         title.setForeground(Color.white);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
