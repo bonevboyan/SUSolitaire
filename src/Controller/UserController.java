@@ -22,18 +22,13 @@ public class UserController {
         // submit user
         this.startMenu.submitUsers(e -> {
             String firstname = this.startMenu.getUsername().trim();
-            //String lastname = this.form.getLastname().trim();
 
             // simple validations
             if(firstname.isEmpty()) {
                 JOptionPane.showMessageDialog(this.startMenu, "Username Required.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
-            } /*else if(lastname.isEmpty()) {
-                JOptionPane.showMessageDialog(this.form, "Last Name Required.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }*/
+            }
 
             this.database.addUser(new User(firstname, 100));
             this.database.saveUser();

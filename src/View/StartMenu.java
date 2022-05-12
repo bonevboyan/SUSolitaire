@@ -100,6 +100,10 @@ public class StartMenu extends JPanel {
         scoresButton.addActionListener(actionListener);
     }
 
+    public void viewCredits(ActionListener actionListener) {
+        creditsButton.addActionListener(actionListener);
+    }
+
     public void topScores(Object[] objects) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) topScores.getModel();
         defaultTableModel.setColumnIdentifiers(userTableColumn);
