@@ -24,10 +24,14 @@ public class GameSelectionScreen extends JPanel {
 
         gamesButtonsList = new ArrayList<GameSelectionButton>();
         gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
 
         gamesButtonsPanel = new JPanel();
         gamesButtonsPanel.setLayout(new GridBagLayout());
-        gamesButtonsPanel.setPreferredSize(new Dimension(1000, 500));
+        gamesButtonsPanel.setBackground(new Color(0, 81, 0));
+        gamesButtonsPanel.setPreferredSize(new Dimension((GameSelectionButton.WIDTH + 50) * gamesButtonsList.size(), GameSelectionButton.HEIGHT + 100));
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         gridBagConstraints.fill = GridBagConstraints.BOTH;
 
@@ -36,21 +40,28 @@ public class GameSelectionScreen extends JPanel {
             gamesButtonsPanel.add(gamesButtonsList.get(i), gridBagConstraints);
         }
 
-        Insets defaultInsets = new Insets(0, 0, 10, 0);
+        Insets defaultInsets = new Insets(5, 5, 5, 5);
 
         backButton = new JButton("Go Back");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 0;
+        gridBagConstraints.weighty = 0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.insets = defaultInsets;
         add(backButton, gridBagConstraints);
 
         gamesScrollPane = new JScrollPane(gamesButtonsPanel);
+        gamesScrollPane.setBorder(BorderFactory.createEmptyBorder());
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.weighty = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = defaultInsets;
-        gamesScrollPane.setPreferredSize(new Dimension(1000, 600));
+        //gamesScrollPane.setPreferredSize(new Dimension(1000, gamesButtonsPanel.getHeight()));
         add(gamesScrollPane, gridBagConstraints);
 
 
