@@ -23,7 +23,7 @@ public class GameSelectionScreen extends JPanel {
         setLayout(new GridBagLayout());
 
         gamesButtonsList = new ArrayList<GameSelectionButton>();
-        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        gamesButtonsList.add(new GameSelectionButton("Klondike", Color.blue));
         gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
         gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
         gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
@@ -70,6 +70,10 @@ public class GameSelectionScreen extends JPanel {
 
     public void backButton(ActionListener actionListener) {
         backButton.addActionListener(actionListener);
+    }
+
+    public void gameButton(int index, ActionListener actionListener) {
+        gamesButtonsList.get(index).addActionListener(actionListener);
     }
 
 }
