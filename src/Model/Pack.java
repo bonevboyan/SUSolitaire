@@ -1,5 +1,8 @@
 package Model;
 
+import Model.Enums.CardNumber;
+import Model.Enums.CardSuit;
+
 import java.util.Collections;
 import java.util.LinkedList;
 

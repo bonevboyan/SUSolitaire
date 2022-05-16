@@ -100,6 +100,13 @@ public class StartMenu extends JPanel {
         scoresButton.addActionListener(actionListener);
     }
 
+    /*
+    |           |
+    | _________ |
+    |___  |  ___|
+    |  |  |  |  |
+    |  |  |  |  |
+    */
     public void viewCredits(ActionListener actionListener) {
         creditsButton.addActionListener(actionListener);
     }

@@ -1,5 +1,8 @@
 package Model;
 
+import Model.Enums.CardNumber;
+import Model.Enums.CardSuit;
+
 public class Card {
     private CardSuit cardSuit;
     private CardNumber cardNumber;

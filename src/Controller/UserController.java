@@ -25,9 +25,10 @@ public class UserController {
 
             // simple validations
             if(firstname.isEmpty()) {
-                JOptionPane.showMessageDialog(this.startMenu, "Username Required.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+//                JOptionPane.showMessageDialog(this.startMenu, "Username Required.", "Error",
+//                        JOptionPane.ERROR_MESSAGE);
+//                return;
+                firstname = "guest" + Math.random() * 100;
             }
 
             this.database.addUser(new User(firstname, 100));
