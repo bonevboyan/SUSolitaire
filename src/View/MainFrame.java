@@ -1,5 +1,6 @@
 package View;
 
+import Controller.KlondikeController;
 import Controller.UserController;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class MainFrame extends JFrame {
 
         // initialize user controller
         new UserController(startMenu, userDetails);
+        new KlondikeController(klondikeScreen);
 
         // adds view to card layout with unique constraints
         add(startMenu, "start menu");

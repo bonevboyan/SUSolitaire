@@ -24,7 +24,7 @@ public class Database {
 
     // saves user to database file
     public void saveUser() {
-        try{
+        try {
 
             StringBuilder text = new StringBuilder(getUsersString());
             for (User user : userArrayList) {
@@ -37,7 +37,7 @@ public class Database {
     }
 
     // reads user from database file
-    public Object[] loadUsers() throws IOException {
+    public Object[] loadUsers() {
         Object[] objects;
         String text = getUsersString();
 
@@ -47,35 +47,32 @@ public class Database {
     }
 
     // reads user from database file
-    public Object[] topScores() throws IOException {
-        Object[] objects;
-        String text = getUsersString();
 
-        objects = Arrays.stream(text.split(" ")).limit(5).toArray();
 
-        return objects;
-    }
+    private String getUsersString() {
+        try {
+            String command = "curl \\\n" +
+                    "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
+                    "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
+            Process process = Runtime.getRuntime().exec(command);
+            String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
-    private String getUsersString() throws IOException {
-        String command = "curl \\\n" +
-                "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
-                "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
-        Process process = Runtime.getRuntime().exec(command);
-        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
+            Matcher m = r.matcher(json);
 
-        Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
-        Matcher m = r.matcher(json);
-
-        if (m.find()) {
-            return m.group(1);
-        } else {
+            if (m.find()) {
+                return m.group(1);
+            } else {
+                return "";
+            }
+        } catch (Exception ex) {
             return "";
         }
     }
 
     private void sendNewData(String newContent) throws IOException {
         URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
-        HttpURLConnection http = (HttpURLConnection)url.openConnection();
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("POST");
         http.setDoOutput(true);
         http.setRequestProperty("Content-Type", "application/json");
