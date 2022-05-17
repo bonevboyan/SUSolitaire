@@ -32,6 +32,7 @@ public class Pack {
         Collections.shuffle(pack);
     }
 
+    //getter and setter
     public LinkedList<Card> getPack() {
         return pack;
     }

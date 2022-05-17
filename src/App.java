@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
-        // runs in AWT thread
+        // starts app
         SwingUtilities.invokeLater(MainFrame::new);
     }
 

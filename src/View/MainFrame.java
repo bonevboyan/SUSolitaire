@@ -30,6 +30,7 @@ public class MainFrame extends JFrame {
         add(gameSelectionScreen, "game selection");
         add(creditsScreen, "credits");
         add(klondikeScreen, "klondike");
+
         // switch view according to its constraints on click
         startMenu.viewUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "user details"));
         startMenu.submitUsers(e -> cardLayout.show(MainFrame.this.getContentPane(), "game selection"));
@@ -43,9 +44,11 @@ public class MainFrame extends JFrame {
         // icon for our application
         ImageIcon imageIcon = new ImageIcon("src/assets/appicon.png");
         setIconImage(imageIcon.getImage());
+
         // frame width & height
         int FRAME_WIDTH = 1200;
         int FRAME_HEIGHT = 700;
+
         // size of our application frame
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);

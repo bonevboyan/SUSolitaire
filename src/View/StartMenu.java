@@ -27,6 +27,7 @@ public class StartMenu extends JPanel {
         usernameField = new JPlaceholderTextField(25);
         topScores = new JTable();
 
+        //initialize buttons
         playButton = new JButton("Play");
         playButton.setPreferredSize(new Dimension(500, 100));
         scoresButton = new JButton("View All Scores");
@@ -92,12 +93,18 @@ public class StartMenu extends JPanel {
         return usernameField.getText();
     }
 
+
+    // event listeners for buttons
     public void submitUsers(ActionListener actionListener) {
             playButton.addActionListener(actionListener);
     }
 
     public void viewUsers(ActionListener actionListener) {
         scoresButton.addActionListener(actionListener);
+    }
+
+    public void viewCredits(ActionListener actionListener) {
+        creditsButton.addActionListener(actionListener);
     }
 
     /*
@@ -107,15 +114,12 @@ public class StartMenu extends JPanel {
     |  |  |  |  |
     |  |  |  |  |
     */
-    public void viewCredits(ActionListener actionListener) {
-        creditsButton.addActionListener(actionListener);
-    }
 
     public void topScores(Object[] objects) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) topScores.getModel();
         defaultTableModel.setColumnIdentifiers(userTableColumn);
         int i = 0;
-        while(i < objects.length) {
+        while (i < objects.length) {
             String row = objects[i].toString().trim();
             String[] rows = row.split(",");
             defaultTableModel.addRow(rows);
@@ -125,7 +129,7 @@ public class StartMenu extends JPanel {
 
     // reset fields
     public void reset(boolean bln) {
-        if(bln) {
+        if (bln) {
             usernameField.setText("");
         }
     }

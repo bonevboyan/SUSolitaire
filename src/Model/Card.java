@@ -15,6 +15,7 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
+    //getters and setters
     public CardSuit getCardSymbol() {
         return cardSuit;
     }

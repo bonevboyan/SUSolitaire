@@ -16,12 +16,13 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.NONE;
         Insets defaultInsets = new Insets(5, 5, 5, 5);
 
-        ImageIcon imageIcon = new ImageIcon("src/assets/X.png");
+        ImageIcon exitIcon = new ImageIcon("src/assets/X.png");
+        ImageIcon exitIcon_selected = new ImageIcon("src/assets/X_selected.png");
 
-        exitButton = new JButton(imageIcon);
+        exitButton = new JButton(exitIcon);
         exitButton.setBorderPainted(false);
         exitButton.setBorder(null);
-
+        exitButton.setRolloverIcon(exitIcon_selected);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

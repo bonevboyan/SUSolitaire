@@ -9,6 +9,7 @@ public class Score implements Comparable<Score> {
         this.username = username;
     }
 
+    //getters and setters
     public int getPoints() {
         return points;
     }

@@ -12,7 +12,7 @@ public class User {
         this.result = result;
     }
 
-    // getters
+    // getters and setters
     public String getUsername() {
         return username;
     }
