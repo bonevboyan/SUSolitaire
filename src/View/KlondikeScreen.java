@@ -19,7 +19,7 @@ public class KlondikeScreen extends JPanel {
         setLayout(new GridBagLayout());
 
         gridBagConstraints.fill = GridBagConstraints.NONE;
-        Insets defaultInsets = new Insets(5, 5, 5, 5);
+        Insets defaultInsets = new Insets(5, 20, 5, 20);
 
         ImageIcon exitIcon = new ImageIcon("src/assets/X.png");
         ImageIcon exitIcon_selected = new ImageIcon("src/assets/X_selected.png");
@@ -42,20 +42,31 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.gridy = 0;
         add(undoButton, gridBagConstraints);
 
-        plusButton = new JButton("+");
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        add(plusButton, gridBagConstraints);
-
         minusButton = new JButton("-");
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         add(minusButton, gridBagConstraints);
 
         score = new JLabel("0");
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         add(score, gridBagConstraints);
+
+        plusButton = new JButton("+");
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        add(plusButton, gridBagConstraints);
+
+        KlondikeCardPanel cardPanel = new KlondikeCardPanel();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(20, 20, 50, 20);
+        add(cardPanel, gridBagConstraints);
     }
 
     public void exitButton(ActionListener actionListener) {
