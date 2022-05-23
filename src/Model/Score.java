@@ -30,4 +30,9 @@ public class Score implements Comparable<Score> {
     public int compareTo(Score o) {
         return o.points - this.points;
     }
+
+    @Override
+    public String toString() {
+        return username + "," + points;
+    }
 }

@@ -1,9 +1,12 @@
 package View;
 
+import Model.Score;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class UserDetails extends JPanel {
 
@@ -33,15 +36,13 @@ public class UserDetails extends JPanel {
     }
 
     // gets users from database and loads to table
-    public void getUsers(Object[] objects) {
+    public void getUsers(List<Score> scores) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) userTable.getModel();
         defaultTableModel.setColumnIdentifiers(userTableColumn);
-        int i = 0;
-        while(i < objects.length) {
-            String row = objects[i].toString().trim();
-            String[] rows = row.split(",");
-            defaultTableModel.addRow(rows);
-            i++;
+
+        for (int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 

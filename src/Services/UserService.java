@@ -1,11 +1,11 @@
 package Services;
 
 import Model.Database;
-import Model.User;
+import Model.Score;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
     private final Database db;
@@ -16,25 +16,27 @@ public class UserService {
     }
 
     public void sendResult(int score){
-        this.db.addUser(new User(username, score));
-        this.db.saveUser();
+        try{
+            this.db.saveScore(new Score(score, username));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void saveName(String name){
         this.username = name;
     }
 
-    public Object[] getAllScores() {
-        return this.db.loadUsers();
+    public List<Score> getAllScores() {
+        try {
+            return this.db.loadScores();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
-    public Object[] topScores() {
-        Object[] scores = this.db.loadUsers();
-
-        scores = Arrays.stream(scores).sorted().limit(5).toArray();
-
-        Collections.reverse(Arrays.asList(scores));
-
-        return scores;
+    public List<Score> topScores() {
+        return getAllScores().stream().sorted().limit(5).toList();
     }
 }

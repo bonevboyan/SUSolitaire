@@ -1,11 +1,13 @@
 package View;
 
+import Model.Score;
 import View.UIElements.JPlaceholderTextField;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class StartMenu extends JPanel {
     private JPlaceholderTextField usernameField;
@@ -107,23 +109,13 @@ public class StartMenu extends JPanel {
         creditsButton.addActionListener(actionListener);
     }
 
-    /*
-    |           |
-    | _________ |
-    |___  |  ___|
-    |  |  |  |  |
-    |  |  |  |  |
-    */
-
-    public void topScores(Object[] objects) {
+    public void topScores(List<Score> scores) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) topScores.getModel();
         defaultTableModel.setColumnIdentifiers(userTableColumn);
-        int i = 0;
-        while (i < objects.length) {
-            String row = objects[i].toString().trim();
-            String[] rows = row.split(",");
-            defaultTableModel.addRow(rows);
-            i++;
+
+        for (int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 

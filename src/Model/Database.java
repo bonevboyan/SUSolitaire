@@ -4,68 +4,39 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Database {
-
-    private ArrayList<User> userArrayList;
-
-    public Database() {
-        userArrayList = new ArrayList<>();
-    }
-
-    // adds user to our collection
-    public void addUser(User user) {
-        userArrayList.add(user);
-    }
-
     // saves user to database file
-    public void saveUser() {
-        try {
-
-            StringBuilder text = new StringBuilder(getUsersString());
-            for (User user : userArrayList) {
-                text.append(" ").append(user.getUsername()).append(",").append(user.getResult());
-            }
-            sendNewData(text.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void saveScore(Score score) throws IOException {
+        String text = getScoresString() + " " + score.toString();
+        sendNewData(text);
     }
 
     // reads user from database file
-    public Object[] loadUsers() {
-        Object[] objects;
-        String text = getUsersString();
+    public List<Score> loadScores() throws IOException {
+        String text = getScoresString();
 
-        objects = text.split(" ");
-
-        return objects;
+        return Arrays.stream(text.split(" ")).map(x -> x.split(",")).map(x -> new Score(Integer.parseInt(x[1]), x[0])).toList();
     }
 
     // reads user from database file
+    private String getScoresString() throws IOException {
+        String command = "curl \\\n" +
+                "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
+                "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
+        Process process = Runtime.getRuntime().exec(command);
+        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
+        Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
+        Matcher m = r.matcher(json);
 
-    private String getUsersString() {
-        try {
-            String command = "curl \\\n" +
-                    "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
-                    "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
-            Process process = Runtime.getRuntime().exec(command);
-            String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-
-            Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
-            Matcher m = r.matcher(json);
-
-            if (m.find()) {
-                return m.group(1);
-            } else {
-                return "";
-            }
-        } catch (Exception ex) {
+        if (m.find()) {
+            return m.group(1);
+        } else {
             return "";
         }
     }
