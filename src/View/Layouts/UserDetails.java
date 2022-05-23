@@ -1,6 +1,6 @@
-package View;
+package View.Layouts;
 
-import Model.Score;
+import Model.Database.Models.Score;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

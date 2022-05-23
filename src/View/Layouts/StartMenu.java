@@ -1,6 +1,6 @@
-package View;
+package View.Layouts;
 
-import Model.Score;
+import Model.Database.Models.Score;
 import View.UIElements.JPlaceholderTextField;
 
 import javax.swing.*;

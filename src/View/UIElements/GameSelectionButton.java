@@ -1,7 +1,5 @@
 package View.UIElements;
 
-import View.GameSelectionScreen;
-
 import javax.swing.*;
 import java.awt.*;
 

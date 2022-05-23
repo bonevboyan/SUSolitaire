@@ -1,5 +1,3 @@
-import View.MainFrame;
-
 import javax.swing.*;
 
 public class App {

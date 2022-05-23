@@ -1,7 +1,6 @@
-package View;
-
 import Controller.KlondikeController;
 import Controller.UserController;
+import View.Layouts.*;
 
 import javax.swing.*;
 import java.awt.*;

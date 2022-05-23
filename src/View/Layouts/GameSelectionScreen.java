@@ -1,4 +1,4 @@
-package View;
+package View.Layouts;
 
 import View.UIElements.GameSelectionButton;
 

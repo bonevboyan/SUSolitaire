@@ -1,7 +1,7 @@
 package Services;
 
-import Model.Database;
-import Model.Score;
+import Model.Database.Database;
+import Model.Database.Models.Score;
 
 import java.io.IOException;
 import java.util.ArrayList;

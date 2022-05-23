@@ -1,4 +1,4 @@
-package View;
+package View.UIElements;
 
 import javax.swing.*;
 import java.awt.*;

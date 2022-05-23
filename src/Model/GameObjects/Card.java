@@ -1,4 +1,4 @@
-package Model;
+package Model.GameObjects;
 
 import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
@@ -6,6 +6,7 @@ import Model.Enums.CardSuit;
 public class Card {
     private CardSuit cardSuit;
     private CardNumber cardNumber;
+    private boolean isFlipped;
 
     public Card() {
     }
@@ -13,6 +14,7 @@ public class Card {
     public Card(CardSuit cardSuit, CardNumber cardNumber) {
         this.cardSuit = cardSuit;
         this.cardNumber = cardNumber;
+        this.isFlipped = false;
     }
 
     //getters and setters
@@ -32,9 +34,17 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
+    public boolean isFlipped() {
+        return isFlipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        isFlipped = flipped;
+    }
+
     @Override
     public String toString() {
-        return "Model.Card{" +
+        return "Model.GameObjects.Card{" +
                 "cardSuit=" + cardSuit +
                 ", cardNumber=" + cardNumber +
                 '}';

@@ -1,4 +1,6 @@
-package View;
+package View.Layouts;
+
+import View.UIElements.KlondikeCardPanel;
 
 import javax.swing.*;
 import java.awt.*;

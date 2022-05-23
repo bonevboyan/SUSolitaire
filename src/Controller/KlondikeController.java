@@ -1,7 +1,7 @@
 package Controller;
 
 import Services.UserService;
-import View.KlondikeScreen;
+import View.Layouts.KlondikeScreen;
 
 public class KlondikeController {
     private UserService userService;

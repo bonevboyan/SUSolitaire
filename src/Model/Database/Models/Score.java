@@ -1,4 +1,4 @@
-package Model;
+package Model.Database.Models;
 
 public class Score implements Comparable<Score> {
     private String username;

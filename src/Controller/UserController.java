@@ -1,8 +1,8 @@
 package Controller;
 
 import Services.UserService;
-import View.StartMenu;
-import View.UserDetails;
+import View.Layouts.StartMenu;
+import View.Layouts.UserDetails;
 
 public class UserController {
     private UserService userService;

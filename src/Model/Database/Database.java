@@ -1,4 +1,6 @@
-package Model;
+package Model.Database;
+
+import Model.Database.Models.Score;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Database {
+public class  Database {
     // saves user to database file
     public void saveScore(Score score) throws IOException {
         String text = getScoresString() + " " + score.toString();

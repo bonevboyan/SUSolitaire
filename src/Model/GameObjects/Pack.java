@@ -1,7 +1,8 @@
-package Model;
+package Model.GameObjects;
 
 import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
+import Model.GameObjects.Card;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class Pack {
 
     @Override
     public String toString() {
-        return "Model.Pack{" +
+        return "Model.GameObjects.Pack{" +
                 "pack=" + pack +
                 '}';
     }

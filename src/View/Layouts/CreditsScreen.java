@@ -1,4 +1,4 @@
-package View;
+package View.Layouts;
 
 import javax.swing.*;
 import java.awt.*;
