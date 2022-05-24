@@ -2,10 +2,7 @@ package View.UIElements;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class KlondikeCardPanel extends JLayeredPane {
@@ -22,32 +19,48 @@ public class KlondikeCardPanel extends JLayeredPane {
             card.setBounds(0, (10-i)*20, cardBackResized.getIconWidth(), cardBackResized.getIconHeight());
             add(card, i);
 
-            card.addMouseMotionListener(new MouseMotionAdapter() {
-                Point anchor;
-
-                //@Override
-                //public void mousePressed(MouseEvent e) {
-                    //anchor = e.getPoint();
-                    //card.setBounds(e.getPoint().x, e.getPoint().y, cardBackResized.getIconWidth(), cardBackResized.getIconHeight());
-//                    repaint();
-                    //System.out.println(cards.indexOf(card));
-                //}
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    if (anchor != null)
-                        card.setBounds(getMousePosition().x - anchor.x, getMousePosition().y - anchor.y, cardBackResized.getIconWidth(), cardBackResized.getIconHeight());
-                    anchor = e.getPoint();
-                    System.out.println("aaaaaaaaa");
-                }
-
-                //@Override
-                //public void mouseReleased(MouseEvent e) {
-                    //card.setBounds(getMousePosition().x - anchor.x, getMousePosition().y - anchor.y, cardBackResized.getIconWidth(), cardBackResized.getIconHeight());
-                //}
-            });
+            MouseDragListener mouseDragListener = new MouseDragListener(card);
+            card.addMouseMotionListener(mouseDragListener);
+            card.addMouseListener(mouseDragListener);
 
             cards.add(card);
+        }
+    }
+
+    class MouseDragListener extends MouseAdapter implements MouseMotionListener {
+        Point startPoint;
+        JComponent dragObject;
+
+        public MouseDragListener(JComponent dragObject) {
+            this.dragObject = dragObject;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            startPoint = SwingUtilities.convertPoint(dragObject, e.getPoint(), dragObject.getParent());
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            Point location = SwingUtilities.convertPoint(dragObject, e.getPoint(), dragObject.getParent());
+
+            if (dragObject.getParent().getBounds().contains(location)) {
+                Point newLocation = dragObject.getLocation();
+                newLocation.translate(location.x - startPoint.x, location.y - startPoint.y);
+
+//                newLocation.x = Math.max(newLocation.x, 0);
+//                newLocation.y = Math.max(newLocation.y, 0);
+//                newLocation.x = Math.min(newLocation.x, dragObject.getParent().getWidth() - dragObject.getWidth());
+//                newLocation.y = Math.min(newLocation.y, dragObject.getParent().getHeight() - dragObject.getHeight());
+
+                dragObject.setLocation(newLocation);
+                startPoint = location;
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            startPoint = null;
         }
     }
 }
