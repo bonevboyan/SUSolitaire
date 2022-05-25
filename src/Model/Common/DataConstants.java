@@ -1,4 +1,4 @@
-package Model;
+package Model.Common;
 
 public final class DataConstants {
     //constants, needed for database storage

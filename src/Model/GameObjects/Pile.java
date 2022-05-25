@@ -43,6 +43,14 @@ public class Pile {
         }
     }
 
+    public List<Card> getDownCards() {
+        return downCards;
+    }
+
+    public List<Card> getUpCards() {
+        return upCards;
+    }
+
     private Card getLastCard() {
         return upCards.get(upCards.size() - 1);
     }

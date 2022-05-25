@@ -1,11 +1,12 @@
 package Model.GameObjects;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class Field {
-    private ArrayList<Pile> piles;
-    private ArrayList<Stack<Card>> foundations;
+    private List<Pile> piles;
+    private List<Stack<Card>> foundations;
 
     private Stack<Card> upStock;
     private Stack<Card> downStock;
@@ -31,5 +32,21 @@ public class Field {
         }
 
         downStock.addAll(pack.getPack());
+    }
+
+    public List<Pile> getPiles() {
+        return piles;
+    }
+
+    public List<Stack<Card>> getFoundations() {
+        return foundations;
+    }
+
+    public Stack<Card> getUpStock() {
+        return upStock;
+    }
+
+    public Stack<Card> getDownStock() {
+        return downStock;
     }
 }

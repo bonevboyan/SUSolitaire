@@ -1,5 +1,6 @@
 package Model.Database;
 
+import Model.Common.DataConstants;
 import Model.Database.Models.Score;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class  Database {
     private String getScoresString() throws IOException {
         String command = "curl \\\n" +
                 "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
-                "  https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9\n";
+                "  https://api.github.com/gists/" + DataConstants.GIST_ID + "\n";
         Process process = Runtime.getRuntime().exec(command);
         String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
@@ -44,12 +45,12 @@ public class  Database {
     }
 
     private void sendNewData(String newContent) throws IOException {
-        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        URL url = new URL("https://api.github.com/gists/" + DataConstants.GIST_ID);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("POST");
         http.setDoOutput(true);
         http.setRequestProperty("Content-Type", "application/json");
-        http.setRequestProperty("Authorization", "token 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");
+        http.setRequestProperty("Authorization", "token " + DataConstants.GITHUB_TOKEN);
 
         String data = "{\n  \"files\": {\n    \"data.txt\": {\n      \"content\": \"" + newContent + "\"\n    }\n  }\n}";
 

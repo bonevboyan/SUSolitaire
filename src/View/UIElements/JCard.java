@@ -1,6 +1,7 @@
 package View.UIElements;
 
 import Model.GameObjects.Card;
+import View.Common.CardFaceFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,5 +27,19 @@ public class JCard extends JLabel {
     public void setMouseListeners(MouseAdapter listener) {
         addMouseListener(listener);
         addMouseMotionListener(listener);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        if (card.isFlipped()) {
+            CardFaceFactory.paintCardFace(card.getCardSymbol(), card.getCardNumber(), g);
+            //super.paint(g);
+        } else {
+            cardBackResized.paintIcon(this, g, 0, 0);
+        }
+    }
+
+    public Card getCard() {
+        return card;
     }
 }
