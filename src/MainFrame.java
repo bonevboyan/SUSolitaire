@@ -47,8 +47,8 @@ public class MainFrame extends JFrame {
         setIconImage(imageIcon.getImage());
 
         // frame width & height
-        int FRAME_WIDTH = 1200;
-        int FRAME_HEIGHT = 700;
+        int FRAME_WIDTH = 1300;
+        int FRAME_HEIGHT = 800;
 
         // size of our application frame
         setSize(FRAME_WIDTH, FRAME_HEIGHT);

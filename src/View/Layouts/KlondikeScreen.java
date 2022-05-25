@@ -1,6 +1,6 @@
 package View.Layouts;
 
-import View.UIElements.KlondikeCardPanel;
+import View.UIElements.KlondikeCardPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +59,7 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.gridy = 0;
         add(plusButton, gridBagConstraints);
 
-        KlondikeCardPanel cardPanel = new KlondikeCardPanel();
+        KlondikeCardPane cardPanel = new KlondikeCardPane();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1;
