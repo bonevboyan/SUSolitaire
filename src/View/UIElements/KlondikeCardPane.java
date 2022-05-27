@@ -9,18 +9,21 @@ import java.util.ArrayList;
 
 public class KlondikeCardPane extends JLayeredPane {
     ArrayList<PilePanel> pilePanels;
+    ArrayList<FoundationPanel> foundationPanels;
+
+    Field field;
 
     public KlondikeCardPane() {
         setBackground(new Color(0, 81, 0));
 
         //panels for coordination of cards in piles
         pilePanels = new ArrayList<>();
+        foundationPanels = new ArrayList<>();
 
-        Field field = new Field();
-        
+        field = new Field();
+
         for (int i = 0; i < 7; i++) {
-            PilePanel pilePanel = new PilePanel(new Point(i * 180, 200));
-            //pilePanel.setCardAmount(i + 1);
+            PilePanel pilePanel = new PilePanel(new Point(i * 180, 250));
 
             pilePanels.add(pilePanel);
             add(pilePanel);
@@ -47,19 +50,18 @@ public class KlondikeCardPane extends JLayeredPane {
             }
         }
 
-//        ArrayList<JLabel> cards = new ArrayList<>(); //list of cards for test purposes
-//        for (int i = 0; i < 10; i++) {
-//            JCard card = new JCard(new Point(0, 200 + i * 20), null);
-//            add(card);
-//
-//            //add card to pile
-//            moveCard(card, card.getLocation());
-//
-//            //add drag listener
-//            card.setMouseListeners(mouseDragListener(card));
-//
-//            cards.add(card);
-//        }
+        for (int i = 0; i < 4; i++) {
+            FoundationPanel foundationPanel = new FoundationPanel(new Point(540 + i * 180, 20));
+
+            foundationPanels.add(foundationPanel);
+            add(foundationPanel);
+
+            var foundation = field.getFoundations().get(i);
+
+            for (int j = 0; j < foundation.size(); j++) {
+
+            }
+        }
     }
 
     //listener to make card draggable
@@ -71,7 +73,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
-                if(!card.getCard().isFlipped()) return;
+                if (!card.getCard().isFlipped()) return;
 
                 originalPosition = card.getLocation();
                 startPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
@@ -81,7 +83,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //move card when dragged
             @Override
             public void mouseDragged(MouseEvent e) {
-                if(!card.getCard().isFlipped()) return;
+                if (!card.getCard().isFlipped()) return;
 
                 Point location = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
 
@@ -104,13 +106,13 @@ public class KlondikeCardPane extends JLayeredPane {
             //reset on release
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(!card.getCard().isFlipped()) return;
+                if (!card.getCard().isFlipped()) return;
 
-                int startPileIndex = indexOfPile(originalPosition);
-                int newPileIndex = indexOfPile(startPoint);
+                var startLocation = getPanel(originalPosition);
+                var endLocation = getPanel(startPoint);
 
-                if(startPileIndex == newPileIndex) {
-                    moveCardToOldPile(card, startPileIndex);
+                if (startLocation == endLocation) {
+                    moveCardToOldPile(card, startLocation);
                     return;
                 }
 
@@ -125,42 +127,57 @@ public class KlondikeCardPane extends JLayeredPane {
     }
 
     //finds the index of the pile int the list by given coordinates of the pile
-    private int indexOfPile(Point location) {
+    private JPanel getPanel(Point location) {
         for (PilePanel pilePanel : pilePanels) {
             if (pilePanel.getBounds().contains(location)) {
-                return pilePanels.indexOf(pilePanel);
+                return pilePanel;
             }
         }
 
-        return -1;
+        for (FoundationPanel foundationPanel : foundationPanels) {
+            if (foundationPanel.getBounds().contains(location)) {
+                return foundationPanel;
+            }
+        }
+
+        return null;
     }
 
     //moves card to the respective pile, returns boolean wheth  er the move was successful
     private boolean moveCard(JCard card, Point location) {
-        int pileIndex = indexOfPile(location);
+        var dropLocation = getPanel(location);
 
-        if (pileIndex < 0)
+        if (dropLocation == null)
             return false;
 
-        PilePanel pilePanel = pilePanels.get(pileIndex);
-        pilePanel.incrementCardAmount(1);
-        card.setLocation(pilePanel.getX() + 10, pilePanel.getY() + pilePanel.getCardAmount() * 20);
+        //PilePanel pilePanel = pilePanels.get(pileIndex);
+        if (dropLocation instanceof PilePanel) {
+            ((PilePanel) dropLocation).incrementCardAmount(1);
+            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + ((PilePanel) dropLocation).getCardAmount() * 20);
+        }else{
+            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
+        }
+
         moveToFront(card);
         return true;
     }
 
-    private void moveCardToOldPile(JCard card, int pileIndex){
-        PilePanel pilePanel = pilePanels.get(pileIndex);
-        card.setLocation(pilePanel.getX() + 10, pilePanel.getY() + pilePanel.getCardAmount() * 20);
-        moveToFront(card);
+    private void moveCardToOldPile(JCard card, JPanel dropLocation) {
+        if (dropLocation instanceof PilePanel) {
+            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + ((PilePanel) dropLocation).getCardAmount() * 20);
+        }else{
+            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
+        }
+
     }
 
     private void removeCardFromPastPile(Point pastLocation) {
-        int pileIndex = indexOfPile(pastLocation);
+        var dropLocation = getPanel(pastLocation);
 
-        if (pileIndex >= 0) {
-            PilePanel pilePanel = pilePanels.get(pileIndex);
-            pilePanel.incrementCardAmount(-1);
+        if (dropLocation != null) {
+            if (dropLocation instanceof PilePanel) {
+                ((PilePanel) dropLocation).incrementCardAmount(-1);
+            }
         }
     }
 }
