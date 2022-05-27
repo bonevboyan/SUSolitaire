@@ -57,10 +57,6 @@ public class KlondikeCardPane extends JLayeredPane {
             add(foundationPanel);
 
             var foundation = field.getFoundations().get(i);
-
-            for (int j = 0; j < foundation.size(); j++) {
-
-            }
         }
     }
 
@@ -99,7 +95,6 @@ public class KlondikeCardPane extends JLayeredPane {
 
                     card.setLocation(newLocation);
                     startPoint = location;
-                    System.out.println("az kogato");
                 }
             }
 
@@ -112,7 +107,7 @@ public class KlondikeCardPane extends JLayeredPane {
                 var endLocation = getPanel(startPoint);
 
                 if (startLocation == endLocation) {
-                    moveCardToOldPile(card, startLocation);
+                    card.setLocation(originalPosition);
                     return;
                 }
 
@@ -143,7 +138,7 @@ public class KlondikeCardPane extends JLayeredPane {
         return null;
     }
 
-    //moves card to the respective pile, returns boolean wheth  er the move was successful
+    //moves card to the respective pile, returns boolean whether the move was successful
     private boolean moveCard(JCard card, Point location) {
         var dropLocation = getPanel(location);
 
@@ -154,7 +149,7 @@ public class KlondikeCardPane extends JLayeredPane {
         if (dropLocation instanceof PilePanel) {
             ((PilePanel) dropLocation).incrementCardAmount(1);
             card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + ((PilePanel) dropLocation).getCardAmount() * 20);
-        }else{
+        } else {
             card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
         }
 
@@ -162,14 +157,14 @@ public class KlondikeCardPane extends JLayeredPane {
         return true;
     }
 
-    private void moveCardToOldPile(JCard card, JPanel dropLocation) {
-        if (dropLocation instanceof PilePanel) {
-            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + ((PilePanel) dropLocation).getCardAmount() * 20);
-        }else{
-            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
-        }
-
-    }
+//    private void moveCardToOldPile(JCard card, JPanel dropLocation) {
+//        if (dropLocation instanceof PilePanel) {
+//            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + ((PilePanel) dropLocation).getCardAmount() * 20);
+//        } else {
+//            card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
+//        }
+//
+//    }
 
     private void removeCardFromPastPile(Point pastLocation) {
         var dropLocation = getPanel(pastLocation);
