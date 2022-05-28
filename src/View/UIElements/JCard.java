@@ -12,8 +12,11 @@ public class JCard extends JLabel {
     private ImageIcon cardBack;
     private ImageIcon cardBackResized;
 
-    public JCard(Point coordinates, Card card) {
+    private JPanel location;
+
+    public JCard(Point coordinates, Card card, JPanel location) {
         this.card = card;
+        this.location = location;
 
         //resize icon to fit panel
         cardBack = new ImageIcon("src\\assets\\card_back_test.png");
@@ -39,7 +42,15 @@ public class JCard extends JLabel {
         }
     }
 
-    public Card getCard() {
-        return card;
+    public boolean isFlipped() {
+        return card.isFlipped();
+    }
+
+    public void flipCard() {
+        card.setFlipped(true);
+    }
+
+    public boolean isInStock() {
+        return location instanceof DownStockPanel || location instanceof UpStockPanel;
     }
 }

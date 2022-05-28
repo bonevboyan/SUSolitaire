@@ -34,6 +34,17 @@ public class Field {
         downStock.addAll(pack.getPack());
     }
 
+    public Card drawCard() {
+        if (downStock.size() != 0) {
+            upStock.push(downStock.pop());
+            return upStock.peek();
+        }
+
+        downStock.addAll(upStock);
+        upStock.clear();
+        return null;
+    }
+
     public List<Pile> getPiles() {
         return piles;
     }
