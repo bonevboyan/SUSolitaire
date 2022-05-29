@@ -67,14 +67,34 @@ public class KlondikeCardPane extends JLayeredPane {
         for (int i = 0; i < downStock.size(); i++) {
             JCard card = new JCard(new Point(downStockPanel.getX() + 10, downStockPanel.getY() + 10), downStock.get(i), downStockPanel);
             card.setLocation(downStockPanel.getX() + 10, downStockPanel.getY() + 10);
-            downStockPanel.add(card);
+            //downStockPanel.add(card);
+            add(card);
             moveToFront(card);
-            card.setMouseListeners(mouseDragListener(card));
+            card.setMouseListeners(openCardListenerListener(card));
         }
 
         upStockPanel = new UpStockPanel(new Point(180, 20));
         add(upStockPanel);
 
+    }
+
+    MouseAdapter openCardListenerListener(JCard card) {
+        return new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                card.flipCard();
+//                downStockPanel.remove(card);
+//                upStockPanel.add(card);
+                moveCard(card, new Point(190, 30));
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                card.removeMouseListener(this);
+                card.setMouseListeners(mouseDragListener(card));
+            }
+        };
     }
 
     //listener to make card draggable
@@ -87,9 +107,6 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (!card.isFlipped()) {
-                    if(card.isInStock()){
-                        card.setLocation(upStockPanel.getX() + 10, upStockPanel.getY() + 10);
-                    }
                     return;
                 }
 
@@ -118,9 +135,6 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (!card.isFlipped()) {
-                    if(card.isInStock()){
-                        card.flipCard();
-                    }
                     return;
                 }
 
@@ -154,6 +168,10 @@ public class KlondikeCardPane extends JLayeredPane {
             if (foundationPanel.getBounds().contains(location)) {
                 return foundationPanel;
             }
+        }
+
+        if (upStockPanel.getBounds().contains(location)) {
+            return upStockPanel;
         }
 
         return null;
