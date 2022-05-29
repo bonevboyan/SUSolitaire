@@ -22,10 +22,10 @@ public class GameSelectionScreen extends JPanel {
         setBackground(new Color(0, 81, 0));
         setLayout(new GridBagLayout());
 
-        gamesButtonsList = new ArrayList<GameSelectionButton>();
-        gamesButtonsList.add(new GameSelectionButton("Klondike", Color.blue));
-        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
-        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        ImageIcon klondikeImage = new ImageIcon("src/assets/klondike.png");
+
+        gamesButtonsList = new ArrayList<>();
+        gamesButtonsList.add(new GameSelectionButton("Klondike", "src/assets/klondike.png"));
         gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
 
         gamesButtonsPanel = new JPanel();

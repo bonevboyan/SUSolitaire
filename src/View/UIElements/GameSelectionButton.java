@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class GameSelectionButton extends JButton {
 
-    public static final int HEIGHT = 400, WIDTH = 300;
+    public static final int HEIGHT = 350, WIDTH = 380;
 
     public GameSelectionButton(String label, String source) {
-
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setIcon(new ImageIcon(source));
     }
 
     public GameSelectionButton(String label, Color color) {

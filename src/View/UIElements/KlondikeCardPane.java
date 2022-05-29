@@ -106,9 +106,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!card.isFlipped()) {
-                    return;
-                }
+                if (!card.isFlipped()) return;
 
                 originalPosition = card.getLocation();
                 startPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
@@ -134,9 +132,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //reset on release
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (!card.isFlipped()) {
-                    return;
-                }
+                if (!card.isFlipped()) return;
 
                 var startLocation = getPanel(originalPosition);
                 var endLocation = getPanel(startPoint);
@@ -210,5 +206,4 @@ public class KlondikeCardPane extends JLayeredPane {
 /*
 Ideas:
 -responsive pile coordination + responsive card coordination inside pile
--dynamic pile height
  */
