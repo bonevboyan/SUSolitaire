@@ -35,7 +35,7 @@ public class Pile {
     }
 
     public boolean removeLastCards(int count){
-        if(count > upCards.size()){
+        if (count > upCards.size()) {
             return false;
         } else {
             upCards.subList(upCards.size() - count, upCards.size()).clear();

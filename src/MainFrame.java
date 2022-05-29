@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
+    // frame width & height
+    public int FRAME_WIDTH = 1300;
+    public int FRAME_HEIGHT = 800;
 
     // Card layout for switching view
     private CardLayout cardLayout;
@@ -45,10 +48,6 @@ public class MainFrame extends JFrame {
         // icon for our application
         ImageIcon imageIcon = new ImageIcon("src/assets/appicon.png");
         setIconImage(imageIcon.getImage());
-
-        // frame width & height
-        int FRAME_WIDTH = 1300;
-        int FRAME_HEIGHT = 800;
 
         // size of our application frame
         setSize(FRAME_WIDTH, FRAME_HEIGHT);

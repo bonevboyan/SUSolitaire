@@ -141,7 +141,7 @@ public class KlondikeCardPane extends JLayeredPane {
                 var startLocation = getPanel(originalPosition);
                 var endLocation = getPanel(startPoint);
 
-                if (startLocation == endLocation) {
+                if (startLocation == endLocation || upStockPanel.getBounds().contains(startPoint)) {
                     card.setLocation(originalPosition);
                     return;
                 }
