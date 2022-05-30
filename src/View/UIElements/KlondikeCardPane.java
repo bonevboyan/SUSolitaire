@@ -75,16 +75,15 @@ public class KlondikeCardPane extends JLayeredPane {
 
         upStockPanel = new UpStockPanel(new Point(180, 20));
         add(upStockPanel);
-
     }
 
     MouseAdapter openCardListenerListener(JCard card) {
         return new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                card.flipCard();
-                moveCard(card, new Point(190, 30));
-
+                if(field.openCardFromStock()){
+                    moveCard(card, new Point(190, 30));
+                }
             }
 
             @Override
@@ -153,7 +152,7 @@ public class KlondikeCardPane extends JLayeredPane {
                             card.setLocation(originalPosition);
                         }
                     } else if (endLocation instanceof FoundationPanel) {
-                        if (field.addCardToFoundation(card.getCard(), getFoundationIndex(endLocation))) {
+                        if (field.addCardFromPileToFoundation(getPileIndex(startLocation), getFoundationIndex(endLocation))) {
                             moveCard(card, currentPoint);
                             removeCardFromPastPile(originalPosition);
                         } else {
@@ -171,7 +170,7 @@ public class KlondikeCardPane extends JLayeredPane {
                             card.setLocation(originalPosition);
                         }
                     } else if (endLocation instanceof FoundationPanel) {
-                        if (field.addCardToFoundation(card.getCard(), getFoundationIndex(endLocation))) {
+                        if (field.addCardFromStockToFoundation(getFoundationIndex(endLocation))) {
                             moveCard(card, currentPoint);
                             removeCardFromPastPile(originalPosition);
                         } else {

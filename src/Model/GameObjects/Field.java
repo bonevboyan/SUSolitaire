@@ -1,12 +1,14 @@
 package Model.GameObjects;
 
+import Model.Enums.CardSuit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class Field {
     private List<Pile> piles;
-    private List<Stack<Card>> foundations;
+    private List<Foundation> foundations;
 
     private Stack<Card> upStock;
     private Stack<Card> downStock;
@@ -14,9 +16,6 @@ public class Field {
     public Field() {
         piles = new ArrayList<>();
         foundations = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            foundations.add(new Stack<>());
-        }
         upStock = new Stack<>();
         downStock = new Stack<>();
 
@@ -32,6 +31,11 @@ public class Field {
         }
 
         downStock.addAll(pack.getPack());
+
+        foundations.add(new Foundation(CardSuit.HEARTS));
+        foundations.add(new Foundation(CardSuit.SPADES));
+        foundations.add(new Foundation(CardSuit.CLUBS));
+        foundations.add(new Foundation(CardSuit.DIAMONDS));
     }
 
     public Card drawCard() {
@@ -45,6 +49,18 @@ public class Field {
         return null;
     }
 
+    public boolean openCardFromStock() {
+        try {
+            var card = downStock.pop();
+            card.setOpen(true);
+            upStock.push(card);
+
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     public boolean moveCards(int count, int oldPileIndex, int newPileIndex) {
         try {
             var oldPile = this.piles.get(oldPileIndex);
@@ -52,14 +68,15 @@ public class Field {
 
             var cards = oldPile.removeLastCards(count);
 
-            if(cards == null) return false;
+            if (cards == null) return false;
 
-            if(newPile.addCards(cards)) return true;
-            else {
-                oldPile.addCards(cards);
-                return false;
+            if (newPile.addCards(cards)){
+                return true;
             }
-        } catch (IndexOutOfBoundsException ex) {
+
+            oldPile.addCards(cards);
+            return false;
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -67,24 +84,53 @@ public class Field {
     public boolean dropCardFromStock(int pileIndex) {
         try {
             var pile = this.piles.get(pileIndex);
+            var card = upStock.pop();
 
-            return true;
-        } catch (IndexOutOfBoundsException ex) {
+            if (pile.addCard(card)) return true;
+
+            upStock.push(card);
+            return false;
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    public boolean addCardToFoundation(Card card, int foundationIndex) {
+    public boolean addCardFromPileToFoundation(int pileIndex, int foundationIndex) {
         try {
+            var pile = piles.get(pileIndex);
+
+            var foundation = piles.get(foundationIndex);
+
+            var cards = pile.removeLastCards(1);
+            foundation.addCard(cards.get(0));
 
             return true;
-        } catch (IndexOutOfBoundsException ex) {
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean addCardFromStockToFoundation(int foundationIndex) {
+        try {
+            var foundation = piles.get(foundationIndex);
+
+            var card = upStock.pop();
+            foundation.addCard(card);
+
+            return true;
+        } catch (Exception ex) {
             return false;
         }
     }
 
     public boolean dropCardFromFoundation(int pileIndex, int foundationIndex) {
         try {
+            var pile = piles.get(pileIndex);
+
+            var foundation = piles.get(foundationIndex);
+
+            var cards = foundation.removeLastCards(1);
+            pile.addCards(cards);
 
             return true;
         } catch (IndexOutOfBoundsException ex) {
@@ -96,7 +142,7 @@ public class Field {
         return piles;
     }
 
-    public List<Stack<Card>> getFoundations() {
+    public List<Foundation> getFoundations() {
         return foundations;
     }
 

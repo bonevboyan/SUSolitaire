@@ -36,7 +36,6 @@ public class JCard extends JLabel {
     public void paint(Graphics g) {
         if (card.isOpen()) {
             CardFaceFactory.paintCardFace(card.getCardSuit(), card.getCardNumber(), g);
-            //super.paint(g);
         } else {
             cardBackResized.paintIcon(this, g, 0, 0);
         }
@@ -44,17 +43,5 @@ public class JCard extends JLabel {
 
     public boolean isFlipped() {
         return card.isOpen();
-    }
-
-    public void flipCard() {
-        card.setOpen(true);
-    }
-
-    public boolean isInStock() {
-        return location instanceof DownStockPanel || location instanceof UpStockPanel;
-    }
-
-    public Card getCard() {
-        return card;
     }
 }

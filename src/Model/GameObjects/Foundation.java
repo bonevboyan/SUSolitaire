@@ -14,6 +14,11 @@ public class Foundation implements CardStackableCollection {
         cards = new Stack<>();
     }
 
+    public Foundation(CardSuit suit) {
+        cards = new Stack<>();
+        this.suit = suit;
+    }
+
     public Foundation(Stack<Card> cards, CardSuit suit) {
         this.cards = cards;
         this.suit = suit;

@@ -27,19 +27,23 @@ public class Pile {
     }
 
     public boolean addCards(List<Card> cards) {
-        if (isMoveAllowed(cards.get(0).getCardSuit(), getLastCard().getCardSuit())) {
-            upCards.addAll(cards);
-            return true;
-        }
-        return false;
+        return addCard(cards.get(0));
     }
 
     public List<Card> removeLastCards(int count){
         if(count > upCards.size()){
             return null;
         } else {
-            var cards = upCards.subList(upCards.size() - count, upCards.size());
-            upCards.retainAll(cards);
+
+            var cards = new ArrayList<Card>(upCards.subList(upCards.size() - count, upCards.size()));
+            upCards.removeAll(cards);
+
+            if(upCards.isEmpty()){
+                var card = downCards.remove(downCards.size() - 1);
+                upCards.add(card);
+                card.setOpen(true);
+            }
+
             return cards;
         }
     }
