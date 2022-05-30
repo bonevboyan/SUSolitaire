@@ -53,4 +53,8 @@ public class JCard extends JLabel {
     public boolean isInStock() {
         return location instanceof DownStockPanel || location instanceof UpStockPanel;
     }
+
+    public Card getCard() {
+        return card;
+    }
 }

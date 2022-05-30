@@ -83,8 +83,6 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mousePressed(MouseEvent e) {
                 card.flipCard();
-//                downStockPanel.remove(card);
-//                upStockPanel.add(card);
                 moveCard(card, new Point(190, 30));
 
             }
@@ -101,15 +99,17 @@ public class KlondikeCardPane extends JLayeredPane {
     MouseAdapter mouseDragListener(JCard card) {
         return new MouseAdapter() {
             Point originalPosition;
-            Point startPoint;
+            Point currentPoint;
 
             //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!card.isFlipped()) return;
+                if (!card.isFlipped()) {
+                    return;
+                }
 
                 originalPosition = card.getLocation();
-                startPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
+                currentPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
                 moveToFront(card);
             }
 
@@ -122,32 +122,79 @@ public class KlondikeCardPane extends JLayeredPane {
 
                 if (card.getParent().getBounds().contains(location)) {
                     Point newLocation = card.getLocation();
-                    newLocation.translate(location.x - startPoint.x, location.y - startPoint.y);
+                    newLocation.translate(location.x - currentPoint.x, location.y - currentPoint.y);
 
                     card.setLocation(newLocation);
-                    startPoint = location;
+                    currentPoint = location;
                 }
             }
 
             //reset on release
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (!card.isFlipped()) return;
+                if (!card.isFlipped()) {
+                    return;
+                }
 
                 var startLocation = getPanel(originalPosition);
-                var endLocation = getPanel(startPoint);
+                var endLocation = getPanel(currentPoint);
 
-                if (startLocation == endLocation || upStockPanel.getBounds().contains(startPoint)) {
+                if (startLocation == endLocation || endLocation instanceof UpStockPanel) {
                     card.setLocation(originalPosition);
                     return;
                 }
 
-                if (!moveCard(card, startPoint))
+                if (startLocation instanceof PilePanel) {
+                    if (endLocation instanceof PilePanel) {
+                        if (field.moveCards(1, getPileIndex(startLocation), getPileIndex(endLocation))) {
+                            moveCard(card, currentPoint);
+                            removeCardFromPastPile(originalPosition);
+                        } else {
+                            card.setLocation(originalPosition);
+                        }
+                    } else if (endLocation instanceof FoundationPanel) {
+                        if (field.addCardToFoundation(card.getCard(), getFoundationIndex(endLocation))) {
+                            moveCard(card, currentPoint);
+                            removeCardFromPastPile(originalPosition);
+                        } else {
+                            card.setLocation(originalPosition);
+                        }
+                    } else {
+                        card.setLocation(originalPosition);
+                    }
+                } else if (startLocation instanceof UpStockPanel) {
+                    if (endLocation instanceof PilePanel) {
+                        if (field.dropCardFromStock(getPileIndex(endLocation))) {
+                            moveCard(card, currentPoint);
+                            removeCardFromPastPile(originalPosition);
+                        } else {
+                            card.setLocation(originalPosition);
+                        }
+                    } else if (endLocation instanceof FoundationPanel) {
+                        if (field.addCardToFoundation(card.getCard(), getFoundationIndex(endLocation))) {
+                            moveCard(card, currentPoint);
+                            removeCardFromPastPile(originalPosition);
+                        } else {
+                            card.setLocation(originalPosition);
+                        }
+                    } else {
+                        card.setLocation(originalPosition);
+                    }
+                } else if (startLocation instanceof FoundationPanel) {
+                    if (endLocation instanceof PilePanel) {
+                        if (field.dropCardFromFoundation(getPileIndex(endLocation), getFoundationIndex(startLocation))) {
+                            moveCard(card, currentPoint);
+                            removeCardFromPastPile(originalPosition);
+                        } else {
+                            card.setLocation(originalPosition);
+                        }
+                    }
+                } else {
                     card.setLocation(originalPosition);
-                else
-                    removeCardFromPastPile(originalPosition);
+                }
 
-                startPoint = null;
+
+                currentPoint = null;
             }
         };
     }
@@ -193,12 +240,30 @@ public class KlondikeCardPane extends JLayeredPane {
     }
 
     private void removeCardFromPastPile(Point pastLocation) {
-        var dropLocation = getPanel(pastLocation);
+        var location = getPanel(pastLocation);
 
-        if (dropLocation != null) {
-            if (dropLocation instanceof PilePanel) {
-                ((PilePanel) dropLocation).incrementCardAmount(-1);
+        if (location != null) {
+            if (location instanceof PilePanel) {
+                ((PilePanel) location).incrementCardAmount(-1);
             }
+        }
+    }
+
+    private int getFoundationIndex(JPanel panel) {
+        try {
+            var foundationPanel = (PilePanel) panel;
+            return this.pilePanels.indexOf(foundationPanel);
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
+
+    private int getPileIndex(JPanel panel) {
+        try {
+            var pilePanel = (PilePanel) panel;
+            return this.pilePanels.indexOf(pilePanel);
+        } catch (Exception ex) {
+            return -1;
         }
     }
 }
@@ -206,4 +271,5 @@ public class KlondikeCardPane extends JLayeredPane {
 /*
 Ideas:
 -responsive pile coordination + responsive card coordination inside pile
+-dynamic pile height
  */

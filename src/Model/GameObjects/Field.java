@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class Field {
     private List<Pile> piles;
-    private List<Foundation> foundations;
+    private List<Stack<Card>> foundations;
 
     private Stack<Card> upStock;
     private Stack<Card> downStock;
@@ -15,7 +15,7 @@ public class Field {
         piles = new ArrayList<>();
         foundations = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            foundations.add(new Foundation());
+            foundations.add(new Stack<>());
         }
         upStock = new Stack<>();
         downStock = new Stack<>();
@@ -45,11 +45,58 @@ public class Field {
         return null;
     }
 
+    public boolean moveCards(int count, int oldPileIndex, int newPileIndex) {
+        try {
+            var oldPile = this.piles.get(oldPileIndex);
+            var newPile = this.piles.get(newPileIndex);
+
+            var cards = oldPile.removeLastCards(count);
+
+            if(cards == null) return false;
+
+            if(newPile.addCards(cards)) return true;
+            else {
+                oldPile.addCards(cards);
+                return false;
+            }
+        } catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
+    public boolean dropCardFromStock(int pileIndex) {
+        try {
+            var pile = this.piles.get(pileIndex);
+
+            return true;
+        } catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
+    public boolean addCardToFoundation(Card card, int foundationIndex) {
+        try {
+
+            return true;
+        } catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
+    public boolean dropCardFromFoundation(int pileIndex, int foundationIndex) {
+        try {
+
+            return true;
+        } catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
     public List<Pile> getPiles() {
         return piles;
     }
 
-    public List<Foundation> getFoundations() {
+    public List<Stack<Card>> getFoundations() {
         return foundations;
     }
 

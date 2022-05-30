@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pile {
-    //unrevealed cards
     private List<Card> downCards;
-    //revealed cards
     private List<Card> upCards;
 
     public Pile(List<Card> cards) {
@@ -21,27 +19,28 @@ public class Pile {
     }
 
     public boolean addCard(Card card) {
-        if (isMoveAllowed(card)) {
+        if (isMoveAllowed(card.getCardSuit(), getLastCard().getCardSuit())) {
             upCards.add(card);
             return true;
         }
         return false;
     }
 
-    public boolean addCards(ArrayList<Card> cards) {
-        if (isMoveAllowed(cards.get(0))) {
+    public boolean addCards(List<Card> cards) {
+        if (isMoveAllowed(cards.get(0).getCardSuit(), getLastCard().getCardSuit())) {
             upCards.addAll(cards);
             return true;
         }
         return false;
     }
 
-    public boolean removeLastCards(int count){
-        if (count > upCards.size()) {
-            return false;
+    public List<Card> removeLastCards(int count){
+        if(count > upCards.size()){
+            return null;
         } else {
-            upCards.subList(upCards.size() - count, upCards.size()).clear();
-            return true;
+            var cards = upCards.subList(upCards.size() - count, upCards.size());
+            upCards.retainAll(cards);
+            return cards;
         }
     }
 
@@ -57,12 +56,10 @@ public class Pile {
         return upCards.get(upCards.size() - 1);
     }
 
-    private boolean isMoveAllowed(Card card) {
-        CardSuit cardSuit = card.getCardSuit();
-        CardSuit lastSuit = getLastCard().getCardSuit();
-        return switch (cardSuit) {
-            case CLUBS, SPADES -> lastSuit.equals(CardSuit.HEARTS) || lastSuit.equals(CardSuit.DIAMONDS);
-            case HEARTS, DIAMONDS -> lastSuit.equals(CardSuit.CLUBS) || lastSuit.equals(CardSuit.SPADES);
+    private boolean isMoveAllowed(CardSuit firstCardSuit, CardSuit secondCardSuit) {
+        return switch (firstCardSuit) {
+            case CLUBS, SPADES -> secondCardSuit.equals(CardSuit.HEARTS) || secondCardSuit.equals(CardSuit.DIAMONDS);
+            case HEARTS, DIAMONDS -> secondCardSuit.equals(CardSuit.CLUBS) || secondCardSuit.equals(CardSuit.SPADES);
         };
     }
 }

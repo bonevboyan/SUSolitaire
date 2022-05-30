@@ -2,10 +2,11 @@ package Model.GameObjects;
 
 import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
+import Model.Interfaces.CardStackableCollection;
 
 import java.util.Stack;
 
-public class Foundation {
+public class Foundation implements CardStackableCollection {
     private Stack<Card> cards;
     private CardSuit suit;
 
