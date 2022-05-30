@@ -6,7 +6,7 @@ import Model.Enums.CardSuit;
 public class Card {
     private CardSuit cardSuit;
     private CardNumber cardNumber;
-    private boolean isFlipped;
+    private boolean isOpen;
 
     public Card() {
     }
@@ -14,15 +14,15 @@ public class Card {
     public Card(CardSuit cardSuit, CardNumber cardNumber) {
         this.cardSuit = cardSuit;
         this.cardNumber = cardNumber;
-        this.isFlipped = false;
+        this.isOpen = false;
     }
 
     //getters and setters
-    public CardSuit getCardSymbol() {
+    public CardSuit getCardSuit() {
         return cardSuit;
     }
 
-    public void setCardSymbol(CardSuit cardSuit) {
+    public void setCardSuit(CardSuit cardSuit) {
         this.cardSuit = cardSuit;
     }
 
@@ -34,12 +34,12 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public boolean isFlipped() {
-        return isFlipped;
+    public boolean isOpen() {
+        return isOpen;
     }
 
-    public void setFlipped(boolean flipped) {
-        isFlipped = flipped;
+    public void setOpen(boolean open) {
+        isOpen = open;
     }
 
     @Override

@@ -34,8 +34,8 @@ public class JCard extends JLabel {
 
     @Override
     public void paint(Graphics g) {
-        if (card.isFlipped()) {
-            CardFaceFactory.paintCardFace(card.getCardSymbol(), card.getCardNumber(), g);
+        if (card.isOpen()) {
+            CardFaceFactory.paintCardFace(card.getCardSuit(), card.getCardNumber(), g);
             //super.paint(g);
         } else {
             cardBackResized.paintIcon(this, g, 0, 0);
@@ -43,11 +43,11 @@ public class JCard extends JLabel {
     }
 
     public boolean isFlipped() {
-        return card.isFlipped();
+        return card.isOpen();
     }
 
     public void flipCard() {
-        card.setFlipped(true);
+        card.setOpen(true);
     }
 
     public boolean isInStock() {

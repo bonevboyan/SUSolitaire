@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class Field {
     private List<Pile> piles;
-    private List<Stack<Card>> foundations;
+    private List<Foundation> foundations;
 
     private Stack<Card> upStock;
     private Stack<Card> downStock;
@@ -15,7 +15,7 @@ public class Field {
         piles = new ArrayList<>();
         foundations = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            foundations.add(new Stack<>());
+            foundations.add(new Foundation());
         }
         upStock = new Stack<>();
         downStock = new Stack<>();
@@ -49,7 +49,7 @@ public class Field {
         return piles;
     }
 
-    public List<Stack<Card>> getFoundations() {
+    public List<Foundation> getFoundations() {
         return foundations;
     }
 
