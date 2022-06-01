@@ -1,5 +1,6 @@
 package Model.GameObjects;
 
+import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
 import Model.Interfaces.CardStackableCollection;
 
@@ -23,30 +24,16 @@ public class Pile extends CardStackableCollection {
         return true;
     }
 
-    public List<Card> removeLastCards(int count) {
-        if (count > cards.size()) {
-            return null;
-        }
-
-        ArrayList<Card> removedCards = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            removedCards.add(cards.pop());
-        }
-        Collections.reverse(removedCards);
-
-        if (!cards.isEmpty()) {
-            cards.peek().setOpen(true);
-        }
-
-        return cards;
-    }
-
     public Stack<Card> getCards() {
         return cards;
     }
 
     @Override
     protected boolean isMoveAllowed(Card card) {
+        if (cards.isEmpty()) {
+            return card.getCardNumber() == CardNumber.KING;
+        }
+
         CardSuit cardSuit = card.getCardSuit();
         CardSuit lastSuit = cards.peek().getCardSuit();
         return switch (cardSuit) {

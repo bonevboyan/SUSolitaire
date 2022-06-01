@@ -1,21 +1,20 @@
 package Model.GameObjects;
 
-import Model.Enums.CardSuit;
+import Model.Enums.CardCollectionType;
+import Model.Interfaces.CardStackableCollection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class Field {
-    private List<Pile> piles;
-    private List<Foundation> foundations;
+    private List<CardStackableCollection> cardStacks;
 
     private Stack<Card> upStock;
     private Stack<Card> downStock;
 
     public Field() {
-        piles = new ArrayList<>();
-        foundations = new ArrayList<>();
+        cardStacks = new ArrayList<>();
         upStock = new Stack<>();
         downStock = new Stack<>();
 
@@ -25,7 +24,7 @@ public class Field {
             var cards = pack.getPack().subList(0, i);
 
             Pile pile = new Pile(cards);
-            piles.add(pile);
+            cardStacks.add(pile);
 
             cards.clear();
         }
@@ -33,19 +32,8 @@ public class Field {
         downStock.addAll(pack.getPack());
 
         for (int i = 0; i < 4; i++) {
-            foundations.add(new Foundation());
+            cardStacks.add(new Foundation());
         }
-    }
-
-    public Card drawCard() {
-        if (downStock.size() != 0) {
-            upStock.push(downStock.pop());
-            return upStock.peek();
-        }
-
-        downStock.addAll(upStock);
-        upStock.clear();
-        return null;
     }
 
     public boolean openCardFromStock() {
@@ -60,93 +48,50 @@ public class Field {
         }
     }
 
-    public boolean moveCards(int count, int oldPileIndex, int newPileIndex) {
+    public boolean moveCardFromStock(CardCollectionInfo stackInfo) {
         try {
-            var oldPile = this.piles.get(oldPileIndex);
-            var newPile = this.piles.get(newPileIndex);
+            var stack = this.cardStacks.get(stackInfo.getIndex() + stackInfo.getStackType().index);
 
-            var cards = oldPile.removeLastCards(count);
+            var card = upStock.pop();
 
+            var cards = new ArrayList<Card>();
+            cards.add(card);
+
+            if (stack.addCards(cards)) return true;
+            else {
+                upStock.add(card);
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+
+    }
+
+    public boolean moveCards(int count, CardCollectionInfo oldStackInfo, CardCollectionInfo newStackInfo) {
+        try {
+            var oldStack = this.cardStacks.get(oldStackInfo.getIndex() + oldStackInfo.getStackType().index);
+            var newStack = this.cardStacks.get(newStackInfo.getIndex() + newStackInfo.getStackType().index);
+
+            var cards = oldStack.removeLastCards(count);
             if (cards == null) return false;
 
-            if (newPile.addCards(cards)) {
+            if (newStack.addCards(cards)) {
+                if (!oldStack.getCards().isEmpty()) {
+                    oldStack.getCards().peek().setOpen(true);
+                }
                 return true;
+            } else {
+                oldStack.addCards(cards);
+                return false;
             }
-
-            oldPile.addCards(cards);
-            return false;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean dropCardFromStock(int pileIndex) {
-        try {
-            var pile = this.piles.get(pileIndex);
-            var card = upStock.pop();
-
-            if (pile.addCard(card)) return true;
-
-            upStock.push(card);
-            return false;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean addCardFromPileToFoundation(int pileIndex, int foundationIndex) {
-        try {
-            var pile = piles.get(pileIndex);
-
-            var foundation = piles.get(foundationIndex);
-
-            var cards = pile.removeLastCards(1);
-            foundation.addCard(cards.get(0));
-
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean addCardFromStockToFoundation(int foundationIndex) {
-        try {
-            var foundation = piles.get(foundationIndex);
-
-            var card = upStock.pop();
-            foundation.addCard(card);
-
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean dropCardFromFoundation(int pileIndex, int foundationIndex) {
-        try {
-            var pile = piles.get(pileIndex);
-
-            var foundation = piles.get(foundationIndex);
-
-            var cards = foundation.removeLastCards(1);
-            pile.addCards(cards);
-
-            return true;
         } catch (IndexOutOfBoundsException ex) {
             return false;
         }
     }
 
     public List<Pile> getPiles() {
-        return piles;
-    }
-
-    public List<Foundation> getFoundations() {
-        return foundations;
-    }
-
-    public Stack<Card> getUpStock() {
-        return upStock;
+        return cardStacks.subList(0, 7).stream().map(x -> (Pile) x).toList();
     }
 
     public Stack<Card> getDownStock() {

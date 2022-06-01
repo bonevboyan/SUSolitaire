@@ -26,8 +26,10 @@ public class Foundation extends CardStackableCollection {
     }
 
     @Override
-    public boolean addCard(Card card) {
-        boolean correctMove = super.addCard(card);
+    public boolean addCards(List<Card> newCards) {
+        if(newCards.size() != 1) return false;
+
+        boolean correctMove = super.addCards(newCards);
         if (correctMove && cards.size() == 1) {
             suit = cards.peek().getCardSuit();
         }

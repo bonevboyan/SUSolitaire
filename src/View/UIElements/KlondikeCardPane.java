@@ -1,6 +1,8 @@
 package View.UIElements;
 
+import Model.Enums.CardCollectionType;
 import Model.GameObjects.Card;
+import Model.GameObjects.CardCollectionInfo;
 import Model.GameObjects.Field;
 
 import javax.swing.*;
@@ -73,7 +75,7 @@ public class KlondikeCardPane extends JLayeredPane {
         return new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(field.openCardFromStock()){
+                if (field.openCardFromStock()) {
                     moveCard(card, new Point(190, 30));
                 }
             }
@@ -95,7 +97,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!card.isFlipped()) return;
+                if (!card.isOpen()) return;
 
                 originalPosition = card.getLocation();
                 currentPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
@@ -105,7 +107,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //move card when dragged
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (!card.isFlipped()) return;
+                if (!card.isOpen()) return;
 
                 Point location = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
 
@@ -121,61 +123,26 @@ public class KlondikeCardPane extends JLayeredPane {
             //reset on release
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (!card.isFlipped()) return;
+                if (!card.isOpen()) return;
 
                 var startLocation = getPanel(originalPosition);
                 var endLocation = getPanel(currentPoint);
 
-                if (startLocation == endLocation || endLocation instanceof UpStockPanel) {
+                var startLocationInfo = getStackInfo(startLocation);
+                var endLocationInfo = getStackInfo(endLocation);
+
+                if (startLocation == endLocation ||
+                        endLocation instanceof UpStockPanel ||
+                        startLocationInfo == null ||
+                        endLocationInfo == null) {
                     card.setLocation(originalPosition);
                     return;
                 }
 
-                if (startLocation instanceof PilePanel) {
-                    if (endLocation instanceof PilePanel) {
-                        if (field.moveCards(1, getPileIndex(startLocation), getPileIndex(endLocation))) {
-                            moveCard(card, currentPoint);
-                            removeCardFromPastPile(originalPosition);
-                        } else {
-                            card.setLocation(originalPosition);
-                        }
-                    } else if (endLocation instanceof FoundationPanel) {
-                        if (field.addCardFromPileToFoundation(getPileIndex(startLocation), getFoundationIndex(endLocation))) {
-                            moveCard(card, currentPoint);
-                            removeCardFromPastPile(originalPosition);
-                        } else {
-                            card.setLocation(originalPosition);
-                        }
-                    } else {
-                        card.setLocation(originalPosition);
-                    }
-                } else if (startLocation instanceof UpStockPanel) {
-                    if (endLocation instanceof PilePanel) {
-                        if (field.dropCardFromStock(getPileIndex(endLocation))) {
-                            moveCard(card, currentPoint);
-                            removeCardFromPastPile(originalPosition);
-                        } else {
-                            card.setLocation(originalPosition);
-                        }
-                    } else if (endLocation instanceof FoundationPanel) {
-                        if (field.addCardFromStockToFoundation(getFoundationIndex(endLocation))) {
-                            moveCard(card, currentPoint);
-                            removeCardFromPastPile(originalPosition);
-                        } else {
-                            card.setLocation(originalPosition);
-                        }
-                    } else {
-                        card.setLocation(originalPosition);
-                    }
-                } else if (startLocation instanceof FoundationPanel) {
-                    if (endLocation instanceof PilePanel) {
-                        if (field.dropCardFromFoundation(getPileIndex(endLocation), getFoundationIndex(startLocation))) {
-                            moveCard(card, currentPoint);
-                            removeCardFromPastPile(originalPosition);
-                        } else {
-                            card.setLocation(originalPosition);
-                        }
-                    }
+                if (startLocationInfo.getStackType() == CardCollectionType.STOCK && field.moveCardFromStock(endLocationInfo) ||
+                        field.moveCards(1, startLocationInfo, endLocationInfo)) {
+                    moveCard(card, currentPoint);
+                    removeCardFromPastPile(originalPosition);
                 } else {
                     card.setLocation(originalPosition);
                 }
@@ -236,21 +203,17 @@ public class KlondikeCardPane extends JLayeredPane {
         }
     }
 
-    private int getFoundationIndex(JPanel panel) {
+    private CardCollectionInfo getStackInfo(JPanel panel) {
         try {
-            var foundationPanel = (PilePanel) panel;
-            return this.pilePanels.indexOf(foundationPanel);
+            if (panel instanceof PilePanel pilePanel) {
+                return new CardCollectionInfo(this.pilePanels.indexOf(pilePanel), CardCollectionType.PILE);
+            } else if (panel instanceof FoundationPanel foundationPanel) {
+                return new CardCollectionInfo(this.foundationPanels.indexOf(foundationPanel), CardCollectionType.FOUNDATION);
+            } else {
+                return new CardCollectionInfo(0, CardCollectionType.STOCK);
+            }
         } catch (Exception ex) {
-            return -1;
-        }
-    }
-
-    private int getPileIndex(JPanel panel) {
-        try {
-            var pilePanel = (PilePanel) panel;
-            return this.pilePanels.indexOf(pilePanel);
-        } catch (Exception ex) {
-            return -1;
+            return null;
         }
     }
 }

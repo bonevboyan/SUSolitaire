@@ -41,7 +41,7 @@ public class JCard extends JLabel {
         }
     }
 
-    public boolean isFlipped() {
+    public boolean isOpen() {
         return card.isOpen();
     }
 }
