@@ -1,69 +1,57 @@
 package Model.GameObjects;
 
 import Model.Enums.CardSuit;
+import Model.Interfaces.CardStackableCollection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
-public class Pile {
-    private List<Card> downCards;
-    private List<Card> upCards;
+public class Pile extends CardStackableCollection {
 
     public Pile(List<Card> cards) {
-        this.downCards = new ArrayList<>();
-        downCards.addAll(cards.subList(0, cards.size() - 1));
-
-        this.upCards = new ArrayList<>();
-        this.upCards.add(cards.get(cards.size() - 1));
-        getLastCard().setOpen(true);
-    }
-
-    public boolean addCard(Card card) {
-        if (isMoveAllowed(card.getCardSuit(), getLastCard().getCardSuit())) {
-            upCards.add(card);
-            return true;
-        }
-        return false;
+        this.cards = new Stack<>();
+        this.cards.addAll(cards);
+        this.cards.peek().setOpen(true);
     }
 
     public boolean addCards(List<Card> cards) {
-        return addCard(cards.get(0));
+        if (!isMoveAllowed(cards.get(0))) return false;
+
+        this.cards.addAll(cards);
+        return true;
     }
 
-    public List<Card> removeLastCards(int count){
-        if(count > upCards.size()){
+    public List<Card> removeLastCards(int count) {
+        if (count > cards.size()) {
             return null;
-        } else {
-
-            var cards = new ArrayList<Card>(upCards.subList(upCards.size() - count, upCards.size()));
-            upCards.removeAll(cards);
-
-            if(upCards.isEmpty()){
-                var card = downCards.remove(downCards.size() - 1);
-                upCards.add(card);
-                card.setOpen(true);
-            }
-
-            return cards;
         }
+
+        ArrayList<Card> removedCards = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            removedCards.add(cards.pop());
+        }
+        Collections.reverse(removedCards);
+
+        if (!cards.isEmpty()) {
+            cards.peek().setOpen(true);
+        }
+
+        return cards;
     }
 
-    public List<Card> getDownCards() {
-        return downCards;
+    public Stack<Card> getCards() {
+        return cards;
     }
 
-    public List<Card> getUpCards() {
-        return upCards;
-    }
-
-    private Card getLastCard() {
-        return upCards.get(upCards.size() - 1);
-    }
-
-    private boolean isMoveAllowed(CardSuit firstCardSuit, CardSuit secondCardSuit) {
-        return switch (firstCardSuit) {
-            case CLUBS, SPADES -> secondCardSuit.equals(CardSuit.HEARTS) || secondCardSuit.equals(CardSuit.DIAMONDS);
-            case HEARTS, DIAMONDS -> secondCardSuit.equals(CardSuit.CLUBS) || secondCardSuit.equals(CardSuit.SPADES);
+    @Override
+    protected boolean isMoveAllowed(Card card) {
+        CardSuit cardSuit = card.getCardSuit();
+        CardSuit lastSuit = cards.peek().getCardSuit();
+        return switch (cardSuit) {
+            case CLUBS, SPADES -> lastSuit.equals(CardSuit.HEARTS) || lastSuit.equals(CardSuit.DIAMONDS);
+            case HEARTS, DIAMONDS -> lastSuit.equals(CardSuit.CLUBS) || lastSuit.equals(CardSuit.SPADES);
         };
     }
 }

@@ -32,10 +32,9 @@ public class Field {
 
         downStock.addAll(pack.getPack());
 
-        foundations.add(new Foundation(CardSuit.HEARTS));
-        foundations.add(new Foundation(CardSuit.SPADES));
-        foundations.add(new Foundation(CardSuit.CLUBS));
-        foundations.add(new Foundation(CardSuit.DIAMONDS));
+        for (int i = 0; i < 4; i++) {
+            foundations.add(new Foundation());
+        }
     }
 
     public Card drawCard() {
@@ -70,7 +69,7 @@ public class Field {
 
             if (cards == null) return false;
 
-            if (newPile.addCards(cards)){
+            if (newPile.addCards(cards)) {
                 return true;
             }
 

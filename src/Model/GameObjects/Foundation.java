@@ -4,10 +4,10 @@ import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
 import Model.Interfaces.CardStackableCollection;
 
+import java.util.List;
 import java.util.Stack;
 
-public class Foundation implements CardStackableCollection {
-    private Stack<Card> cards;
+public class Foundation extends CardStackableCollection {
     private CardSuit suit;
 
     public Foundation() {
@@ -19,38 +19,27 @@ public class Foundation implements CardStackableCollection {
         this.suit = suit;
     }
 
-    public Foundation(Stack<Card> cards, CardSuit suit) {
-        this.cards = cards;
+    public Foundation(List<Card> cards, CardSuit suit) {
+        this.cards = new Stack<>();
+        this.cards.addAll(cards);
         this.suit = suit;
     }
 
+    @Override
     public boolean addCard(Card card) {
-        if (isMoveAllowed(card)) {
-            if (cards.isEmpty())
-                suit = card.getCardSuit();
-
-            cards.push(card);
-            return true;
+        boolean correctMove = super.addCard(card);
+        if (correctMove && cards.size() == 1) {
+            suit = cards.peek().getCardSuit();
         }
-        return false;
+        return correctMove;
     }
 
-    public boolean removeLastCard() {
-        if (!cards.isEmpty()) {
-            cards.pop();
-            return true;
-        }
-        return false;
-    }
 
-    private Card getLastCard() {
-        return cards.peek();
-    }
-
-    public boolean isMoveAllowed(Card card) {
+    @Override
+    protected boolean isMoveAllowed(Card card) {
         return (cards.isEmpty() &&
                card.getCardNumber() == CardNumber.ACE) ||
                (card.getCardSuit() == suit &&
-               card.getCardNumber() == CardNumber.values()[(getLastCard().getCardNumber().ordinal() + 1)]);
+               card.getCardNumber() == CardNumber.values()[(cards.peek().getCardNumber().ordinal() + 1)]);
     }
 }

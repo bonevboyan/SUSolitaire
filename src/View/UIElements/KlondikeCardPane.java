@@ -1,5 +1,6 @@
 package View.UIElements;
 
+import Model.GameObjects.Card;
 import Model.GameObjects.Field;
 
 import javax.swing.*;
@@ -33,22 +34,13 @@ public class KlondikeCardPane extends JLayeredPane {
             var pile = field.getPiles().get(i);
 
             int counter = 0;
-            for (int j = 0; j < pile.getDownCards().size(); j++) {
-                JCard card = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 20), pile.getDownCards().get(j), pilePanel);
-                add(card);
-                moveCard(card, card.getLocation());
+            for (Card card : pile.getCards()) {
+                JCard jCard = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 20), card, pilePanel);
+                add(jCard);
+                moveCard(jCard, jCard.getLocation());
                 counter++;
 
-                card.setMouseListeners(mouseDragListener(card));
-            }
-
-            for (int j = 0; j < pile.getUpCards().size(); j++) {
-                JCard card = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 20), pile.getUpCards().get(j), pilePanel);
-                add(card);
-                moveCard(card, card.getLocation());
-                counter++;
-
-                card.setMouseListeners(mouseDragListener(card));
+                jCard.setMouseListeners(mouseDragListener(jCard));
             }
         }
 
@@ -103,9 +95,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!card.isFlipped()) {
-                    return;
-                }
+                if (!card.isFlipped()) return;
 
                 originalPosition = card.getLocation();
                 currentPoint = SwingUtilities.convertPoint(card, e.getPoint(), card.getParent());
@@ -131,9 +121,7 @@ public class KlondikeCardPane extends JLayeredPane {
             //reset on release
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (!card.isFlipped()) {
-                    return;
-                }
+                if (!card.isFlipped()) return;
 
                 var startLocation = getPanel(originalPosition);
                 var endLocation = getPanel(currentPoint);
@@ -270,5 +258,4 @@ public class KlondikeCardPane extends JLayeredPane {
 /*
 Ideas:
 -responsive pile coordination + responsive card coordination inside pile
--dynamic pile height
  */
