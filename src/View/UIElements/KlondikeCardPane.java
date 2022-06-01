@@ -139,14 +139,22 @@ public class KlondikeCardPane extends JLayeredPane {
                     return;
                 }
 
-                if (startLocationInfo.getStackType() == CardCollectionType.STOCK && field.moveCardFromStock(endLocationInfo) ||
-                        field.moveCards(1, startLocationInfo, endLocationInfo)) {
+                if(startLocationInfo.getStackType() == CardCollectionType.STOCK){
+                    if(field.moveCardFromStock(endLocationInfo)){
+                        moveCard(card, currentPoint);
+                        removeCardFromPastPile(originalPosition);
+                    } else {
+                        card.setLocation(originalPosition);
+                    }
+                    return;
+                }
+
+                if (field.moveCards(1, startLocationInfo, endLocationInfo)) {
                     moveCard(card, currentPoint);
                     removeCardFromPastPile(originalPosition);
                 } else {
                     card.setLocation(originalPosition);
                 }
-
 
                 currentPoint = null;
             }
