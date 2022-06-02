@@ -4,6 +4,7 @@ import Model.Enums.CardCollectionType;
 import Model.Interfaces.CardStackableCollection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -33,6 +34,17 @@ public class Field {
 
         for (int i = 0; i < 4; i++) {
             cardStacks.add(new Foundation());
+        }
+    }
+
+    public void returnCardsToDownStock() {
+        try {
+            downStock.addAll(upStock);
+            downStock.forEach(x -> x.setOpen(false));
+            //Collections.reverse(downStock);
+            upStock = new Stack<>();
+
+        } catch (Exception ignored) {
         }
     }
 
@@ -82,7 +94,7 @@ public class Field {
                 }
                 return true;
             } else {
-                oldStack.addCards(cards);
+                oldStack.getCards().addAll(cards);
                 return false;
             }
         } catch (IndexOutOfBoundsException ex) {
