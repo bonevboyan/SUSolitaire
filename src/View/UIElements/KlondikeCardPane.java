@@ -70,8 +70,8 @@ public class KlondikeCardPane extends JLayeredPane {
 
         var downStock = field.getDownStock();
 
-        for (int i = 0; i < downStock.size(); i++) {
-            JCard card = new JCard(new Point(downStockPanel.getX() + 10, downStockPanel.getY() + 10), downStock.get(i), downStockPanel);
+        for (Card cardValue : downStock) {
+            JCard card = new JCard(new Point(downStockPanel.getX() + 10, downStockPanel.getY() + 10), cardValue, downStockPanel);
             card.setLocation(downStockPanel.getX() + 10, downStockPanel.getY() + 10);
             this.downStock.push(card);
 
@@ -113,9 +113,10 @@ public class KlondikeCardPane extends JLayeredPane {
             public void mouseClicked(MouseEvent e) {
                 if (downStock.isEmpty()) {
                     field.restock();
-                    while (!upStock.isEmpty()) downStock.push(upStock.pop());
-                    //downStock.addAll(upStock);
-                    //upStock = new Stack<>();
+                    while (!upStock.isEmpty()) {
+                        downStock.push(upStock.pop());
+                        moveToFront(downStock.peek());
+                    }
 
                     downStock.forEach(x -> {
                         x.setLocation(new Point(10, 30));

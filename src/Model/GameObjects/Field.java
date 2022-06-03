@@ -38,12 +38,10 @@ public class Field {
 
     public void restock() {
         try {
-            //while (!upStock.isEmpty()) downStock.push(upStock.pop());
-            downStock.addAll(upStock);
-            downStock.forEach(x -> x.setOpen(false));
-            //Collections.reverse(downStock);
-            upStock = new Stack<>();
-
+            while (!upStock.isEmpty()) {
+                downStock.push(upStock.pop());
+                downStock.peek().setOpen(false);
+            }
         } catch (Exception ignored) {}
     }
 
