@@ -65,6 +65,7 @@ public class KlondikeCardPane extends JLayeredPane {
         }
 
         downStockPanel = new DownStockPanel(new Point(0, 20));
+        downStockPanel.addMouseListener(restockListener());
         add(downStockPanel);
 
         var downStock = field.getDownStock();
@@ -102,6 +103,32 @@ public class KlondikeCardPane extends JLayeredPane {
                     card.removeMouseMotionListener(mouseListener);
                 }
                 card.setMouseListeners(mouseDragListener(card));
+            }
+        };
+    }
+
+    MouseAdapter restockListener() {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (downStock.isEmpty()) {
+                    field.restock();
+                    while (!upStock.isEmpty()) downStock.push(upStock.pop());
+                    //downStock.addAll(upStock);
+                    //upStock = new Stack<>();
+
+                    downStock.forEach(x -> {
+                        x.setLocation(new Point(10, 30));
+
+                        for (MouseListener mouseListener : x.getMouseListeners()) {
+                            x.removeMouseListener(mouseListener);
+                        }
+                        for (MouseMotionListener mouseListener : x.getMouseMotionListeners()) {
+                            x.removeMouseMotionListener(mouseListener);
+                        }
+                        x.setMouseListeners(openCardListenerListener(x));
+                    });
+                }
             }
         };
     }
@@ -164,9 +191,10 @@ public class KlondikeCardPane extends JLayeredPane {
                 var startLocationInfo = getStackInfo(startLocation);
                 var endLocationInfo = getStackInfo(endLocation);
 
-                if ((startLocation == endLocation && !(endLocation instanceof UpStockPanel)) ||
+                if (startLocation == endLocation ||
                         startLocationInfo == null ||
-                        endLocationInfo == null) {
+                        endLocationInfo == null ||
+                        endLocation instanceof UpStockPanel) {
                     for (JCard card : cardsSet) {
                         card.setLocation(originalPosition);
                         originalPosition.translate(0, 20);
@@ -175,23 +203,6 @@ public class KlondikeCardPane extends JLayeredPane {
                 }
 
                 if (startLocationInfo.getStackType() == CardCollectionType.STOCK) {
-                    if (endLocationInfo.getStackType() == CardCollectionType.STOCK) {
-                        if (downStock.size() == 0) {
-                            field.returnCardsToDownStock();
-                            downStock.addAll(upStock);
-                            upStock = new Stack<>();
-
-                            downStock.forEach(x -> {
-                                x.setLocation(new Point(10, 30));
-
-                                for (MouseListener mouseListener : x.getMouseListeners()) {
-                                    x.removeMouseListener(mouseListener);
-                                }
-                                x.setMouseListeners(openCardListenerListener(x));
-                            });
-                        }
-                        return;
-                    }
                     if (field.moveCardFromStock(endLocationInfo)) {
                         moveCard(originalCard, currentPoint);
                         removeCardFromPastPile(originalPosition);
@@ -216,7 +227,6 @@ public class KlondikeCardPane extends JLayeredPane {
                 }
 
                 currentPoint = null;
-
             }
         };
     }

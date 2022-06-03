@@ -1,6 +1,5 @@
 package Model.GameObjects;
 
-import Model.Enums.CardCollectionType;
 import Model.Interfaces.CardStackableCollection;
 
 import java.util.ArrayList;
@@ -37,15 +36,15 @@ public class Field {
         }
     }
 
-    public void returnCardsToDownStock() {
+    public void restock() {
         try {
+            //while (!upStock.isEmpty()) downStock.push(upStock.pop());
             downStock.addAll(upStock);
             downStock.forEach(x -> x.setOpen(false));
             //Collections.reverse(downStock);
             upStock = new Stack<>();
 
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     public boolean openCardFromStock() {
