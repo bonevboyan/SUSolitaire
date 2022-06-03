@@ -13,7 +13,10 @@ public class KlondikeScreen extends JPanel {
     private JButton minusButton;
     private JButton plusButton;
 
+    private JButton resetButton;
+
     private JLabel score;
+    private KlondikeCardPane cardPane;
 
     public KlondikeScreen() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -59,16 +62,13 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.gridy = 0;
         add(plusButton, gridBagConstraints);
 
-        KlondikeCardPane cardPanel = new KlondikeCardPane();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.weightx = 1;
-        gridBagConstraints.weighty = 1;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(20, 20, 50, 20);
-        add(cardPanel, gridBagConstraints);
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(e -> resetGame());
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        add(resetButton, gridBagConstraints);
+
+        resetGame();
     }
 
     public void exitButton(ActionListener actionListener) {
@@ -87,5 +87,29 @@ public class KlondikeScreen extends JPanel {
         this.score.setText(String.valueOf(score));
         this.revalidate();
         this.repaint();
+    }
+
+    public void resetGame() {
+        //resets the game and re-adds the game pane
+        if (cardPane != null)
+            remove(cardPane);
+
+        cardPane = new KlondikeCardPane();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(20, 20, 50, 20);
+
+        add(cardPane, gridBagConstraints);
+
+        score.setText("0");
+
+        validate();
     }
 }

@@ -2,7 +2,7 @@ package Model.GameObjects;
 
 import Model.Enums.CardNumber;
 import Model.Enums.CardSuit;
-import Model.Interfaces.CardStackableCollection;
+import Model.Contracts.CardStackableCollection;
 
 import java.util.List;
 import java.util.Stack;
