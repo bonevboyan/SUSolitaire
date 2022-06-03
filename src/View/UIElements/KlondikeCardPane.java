@@ -98,6 +98,9 @@ public class KlondikeCardPane extends JLayeredPane {
                 for (MouseListener mouseListener : card.getMouseListeners()) {
                     card.removeMouseListener(mouseListener);
                 }
+                for (MouseMotionListener mouseListener : card.getMouseMotionListeners()) {
+                    card.removeMouseMotionListener(mouseListener);
+                }
                 card.setMouseListeners(mouseDragListener(card));
             }
         };
@@ -273,8 +276,10 @@ public class KlondikeCardPane extends JLayeredPane {
                 return new CardCollectionInfo(this.pilePanels.indexOf(pilePanel), CardCollectionType.PILE);
             } else if (panel instanceof FoundationPanel foundationPanel) {
                 return new CardCollectionInfo(this.foundationPanels.indexOf(foundationPanel), CardCollectionType.FOUNDATION);
-            } else {
+            } else if (panel instanceof UpStockPanel) {
                 return new CardCollectionInfo(0, CardCollectionType.STOCK);
+            } else {
+                return null;
             }
         } catch (Exception ex) {
             return null;
