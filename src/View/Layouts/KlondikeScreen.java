@@ -1,11 +1,13 @@
 package View.Layouts;
 
+import Model.Common.EndGameListener;
 import Model.Common.ScoreEventListener;
 import Model.Common.TimerEventListener;
 import View.UIElements.KlondikeCardPane;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -127,6 +129,37 @@ public class KlondikeScreen extends JPanel {
             @Override
             public void OnEvent(long seconds) {
                 timerLabel.setText(seconds / 60 + ":" + String.format("%02d", seconds % 60));
+            }
+        });
+
+        cardPane.getField().subscribeToEndGameEvent(new EndGameListener() {
+            @Override
+            public void OnEvent() {
+                cardPane.getField().destroyTimers();
+
+                Object[] options = {"Exit", "Restart"};
+                String endMessage = "You win! \n" +
+                        "Final score: " + scoreLabel.getText() + '\n' +
+                        "Time: " + timerLabel.getText();
+
+                Timer timer = new Timer(100, e -> {
+                    int option = JOptionPane.showOptionDialog(cardPane,
+                            endMessage,
+                            "Game Won!",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,     //do not use a custom Icon
+                            options,  //the titles of buttons
+                            options[0]); //default button title
+
+                    switch (option) {
+                        case 0, JOptionPane.CLOSED_OPTION -> exitButton.doClick();
+                        case 1 -> resetButton.doClick();
+                    }
+                });
+
+                timer.start();
+                timer.setRepeats(false);
             }
         });
 

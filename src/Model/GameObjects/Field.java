@@ -1,10 +1,12 @@
 package Model.GameObjects;
 
+import Model.Common.EndGameListener;
 import Model.Common.GameTimer;
 import Model.Common.ScoreEventListener;
 import Model.Common.TimerEventListener;
 import Model.Contracts.CardStackableCollection;
 import Model.Enums.CardCollectionType;
+import Model.Enums.CardNumber;
 
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
@@ -19,6 +21,7 @@ public class Field {
 
     private Collection<ScoreEventListener> scoreEventListeners;
     private Collection<TimerEventListener> timerEventListeners;
+    private EndGameListener endGameListener;
 
     private Timer timer;
 
@@ -43,7 +46,6 @@ public class Field {
                 increaseScore(-1);
             }
         });
-        //timer.setInitialDelay(3000);
         timer.start();
 
         score = 0;
@@ -98,6 +100,7 @@ public class Field {
 
             if (stack.addCards(cards)) {
                 increaseScore(5);
+                checkVictory();
                 return true;
             } else {
                 upStock.add(card);
@@ -130,6 +133,7 @@ public class Field {
                             increaseScore(5);
                         }
                     }
+                    checkVictory();
                 }
 
                 return true;
@@ -140,6 +144,21 @@ public class Field {
         } catch (IndexOutOfBoundsException ex) {
             return false;
         }
+    }
+
+    public void checkVictory() {
+        //stops if game isn't won
+        try {
+            for (int i = CardCollectionType.FOUNDATION.index; i < cardStacks.size(); i++) {
+                if (cardStacks.get(i).getCards().peek().getCardNumber() != CardNumber.ACE)
+                    return;
+            }
+        } catch (EmptyStackException e) {
+            return;
+        }
+
+        //if game is won:
+        onEndGameEvent();
     }
 
     public List<Pile> getPiles() {
@@ -168,6 +187,14 @@ public class Field {
         for (TimerEventListener eventListener : timerEventListeners) {
             eventListener.OnEvent(gameTimer.getElapsedSeconds());
         }
+    }
+
+    public void subscribeToEndGameEvent(EndGameListener endGameListener) {
+        this.endGameListener = endGameListener;
+    }
+
+    public void onEndGameEvent() {
+        endGameListener.OnEvent();
     }
 
     public void increaseScore(int points) {
