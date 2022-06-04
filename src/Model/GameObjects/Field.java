@@ -43,6 +43,7 @@ public class Field {
                 increaseScore(-1);
             }
         });
+        //timer.setInitialDelay(3000);
         timer.start();
 
         score = 0;
@@ -174,7 +175,10 @@ public class Field {
         onScoreEvent();
     }
 
-    public int getScore() {
-        return score;
+    public void destroyTimers() {
+        timer = new Timer(0, null);
+        gameTimer = new GameTimer();
+        timerEventListeners = new ArrayList<>();
+        scoreEventListeners = new ArrayList<>();
     }
 }

@@ -7,6 +7,8 @@ import View.UIElements.KlondikeCardPane;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class KlondikeScreen extends JPanel {
     private JButton exitButton;
@@ -48,8 +50,15 @@ public class KlondikeScreen extends JPanel {
 //        gridBagConstraints.gridy = 0;
 //        add(undoButton, gridBagConstraints);
 
+        ImageIcon resetIcon = new ImageIcon("src/assets/reset.png");
+        ImageIcon resetIcon_selected  = new ImageIcon("src/assets/reset_selected.png");
 
         resetButton = new JButton("Reset");
+        resetButton = new JButton(resetIcon);
+        resetButton.setBorderPainted(false);
+        resetButton.setBorder(null);
+        resetButton.setRolloverIcon(resetIcon_selected);
+
         resetButton.addActionListener(e -> resetGame());
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -71,7 +80,13 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         add(timerLabel, gridBagConstraints);
 
-        resetGame();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                resetGame();
+            }
+        });
     }
 
     public void exitButton(ActionListener actionListener) {
@@ -80,8 +95,10 @@ public class KlondikeScreen extends JPanel {
 
     public void resetGame() {
         //resets the game and re-adds the game pane
-        if (cardPane != null)
+        if (cardPane != null) {
             remove(cardPane);
+            cardPane.getField().destroyTimers();
+        }
 
         cardPane = new KlondikeCardPane();
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
