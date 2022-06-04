@@ -13,17 +13,6 @@ public class KlondikeController {
         this.klondikeScreen = klondikeScreen;
         score = 0;
 
-        this.klondikeScreen.minusButton(e -> {
-            score -= 5;
-            this.klondikeScreen.setScore(score);
-        });
 
-        this.klondikeScreen.plusButton(e -> {
-            score += 5;
-            this.klondikeScreen.setScore(score);
-            if(score >= 100) {
-                userService.sendResult(score);
-            }
-        });
     }
 }

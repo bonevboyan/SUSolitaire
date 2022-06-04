@@ -296,6 +296,10 @@ public class KlondikeCardPane extends JLayeredPane {
             return null;
         }
     }
+
+    public Field getField() {
+        return field;
+    }
 }
 
 /*

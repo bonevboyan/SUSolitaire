@@ -1,5 +1,7 @@
 package View.Layouts;
 
+import Model.Common.ScoreEventListener;
+import Model.Common.TimerEventListener;
 import View.UIElements.KlondikeCardPane;
 
 import javax.swing.*;
@@ -10,12 +12,11 @@ public class KlondikeScreen extends JPanel {
     private JButton exitButton;
     private JButton undoButton;
 
-    private JButton minusButton;
-    private JButton plusButton;
-
     private JButton resetButton;
 
-    private JLabel score;
+    private JLabel scoreLabel;
+    private JLabel timerLabel;
+
     private KlondikeCardPane cardPane;
 
     public KlondikeScreen() {
@@ -42,51 +43,39 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.insets = defaultInsets;
         add(exitButton, gridBagConstraints);
 
-        undoButton = new JButton("Undo");
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        add(undoButton, gridBagConstraints);
+//        undoButton = new JButton("Undo");
+//        gridBagConstraints.gridx = 1;
+//        gridBagConstraints.gridy = 0;
+//        add(undoButton, gridBagConstraints);
 
-        minusButton = new JButton("-");
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        add(minusButton, gridBagConstraints);
-
-        score = new JLabel("0");
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        add(score, gridBagConstraints);
-
-        plusButton = new JButton("+");
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        add(plusButton, gridBagConstraints);
 
         resetButton = new JButton("Reset");
         resetButton.addActionListener(e -> resetGame());
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         add(resetButton, gridBagConstraints);
+
+        scoreLabel = new JLabel("Score 0");
+        scoreLabel.setForeground(Color.white);
+        scoreLabel.setFont(new Font("", Font.BOLD, 30));
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        add(scoreLabel, gridBagConstraints);
+
+        timerLabel = new JLabel("0:00");
+        timerLabel.setForeground(Color.white);
+        timerLabel.setFont(new Font("", Font.BOLD, 30));
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        add(timerLabel, gridBagConstraints);
 
         resetGame();
     }
 
     public void exitButton(ActionListener actionListener) {
         exitButton.addActionListener(actionListener);
-    }
-
-    public void minusButton(ActionListener actionListener) {
-        minusButton.addActionListener(actionListener);
-    }
-
-    public void plusButton(ActionListener actionListener) {
-        plusButton.addActionListener(actionListener);
-    }
-
-    public void setScore(int score) {
-        this.score.setText(String.valueOf(score));
-        this.revalidate();
-        this.repaint();
     }
 
     public void resetGame() {
@@ -108,7 +97,21 @@ public class KlondikeScreen extends JPanel {
 
         add(cardPane, gridBagConstraints);
 
-        score.setText("0");
+        scoreLabel.setText("Score 0");
+        cardPane.getField().subscribeToScoreEvent(new ScoreEventListener() {
+            @Override
+            public void OnEvent(int score) {
+                scoreLabel.setText("Score " + score);
+            }
+        });
+
+
+        cardPane.getField().subscribeToTimerEvent(new TimerEventListener() {
+            @Override
+            public void OnEvent(long seconds) {
+                timerLabel.setText(seconds / 60 + ":" + String.format("%02d", seconds % 60));
+            }
+        });
 
         validate();
     }
