@@ -22,15 +22,13 @@ Names and scores of top scorers: Shows the names of the highest 5 played games, 
 ## 3. Game mode selection screen
 
 
-![img.png](src/assets/readMeImeges/img.png)
+![img_4.png](src/assets/readMeImeges/img_4.png)
 
 From this screen you can select the game mode that you would like to play
 
 Back button: go back to main menu
 
 Klondike button: Play a game of Klondike
-
-Pyramids buttonL Play a game of Pyramids(Coming soon)
 
 ## 4. Klondike screen
 
