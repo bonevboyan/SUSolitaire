@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -44,7 +46,7 @@ public class StartMenu extends JPanel {
         // space between fields
         Insets fieldsInset = new Insets(0, 20, 10, 0);
         // space between buttons
-        Insets buttonInset = new Insets(20,20,0,0);
+        Insets buttonInset = new Insets(20, 20, 0, 0);
 
         // uses Grid Bag Layout
         setLayout(new GridBagLayout());
@@ -68,6 +70,17 @@ public class StartMenu extends JPanel {
         try (Scanner scanner = new Scanner(new File("src/assets/username.txt"))) {
             usernameField.setText(scanner.nextLine());
         } catch (FileNotFoundException ignored) {}
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                try (Scanner scanner = new Scanner(new File("src/assets/username.txt"))) {
+                    usernameField.setText(scanner.nextLine());
+                } catch (Exception ignored) {
+                }
+            }
+        });
+
 
         add(usernameField, gridBagConstraints);
 
@@ -106,7 +119,7 @@ public class StartMenu extends JPanel {
 
     // event listeners for buttons
     public void submitUsers(ActionListener actionListener) {
-            playButton.addActionListener(actionListener);
+        playButton.addActionListener(actionListener);
     }
 
     public void viewUsers(ActionListener actionListener) {
@@ -123,7 +136,7 @@ public class StartMenu extends JPanel {
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
         for (Score score : scores) {
-            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
+            defaultTableModel.addRow(new String[]{score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 

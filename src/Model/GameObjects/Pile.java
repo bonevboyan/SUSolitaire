@@ -35,8 +35,10 @@ public class Pile extends CardStackableCollection {
         CardSuit cardSuit = card.getCardSuit();
         CardSuit lastSuit = cards.peek().getCardSuit();
         return switch (cardSuit) {
-            case CLUBS, SPADES -> lastSuit.equals(CardSuit.HEARTS) || lastSuit.equals(CardSuit.DIAMONDS);
-            case HEARTS, DIAMONDS -> lastSuit.equals(CardSuit.CLUBS) || lastSuit.equals(CardSuit.SPADES);
+            case CLUBS, SPADES -> (lastSuit.equals(CardSuit.HEARTS) || lastSuit.equals(CardSuit.DIAMONDS))
+                    && card.getCardNumber() == CardNumber.values()[(cards.peek().getCardNumber().ordinal() - 1)];
+            case HEARTS, DIAMONDS -> (lastSuit.equals(CardSuit.CLUBS) || lastSuit.equals(CardSuit.SPADES))
+                    && card.getCardNumber() == CardNumber.values()[(cards.peek().getCardNumber().ordinal() - 1)];
         };
     }
 }

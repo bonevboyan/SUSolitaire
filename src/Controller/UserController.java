@@ -5,10 +5,10 @@ import View.Layouts.KlondikeScreen;
 import View.Layouts.StartMenu;
 import View.Layouts.UserDetails;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class UserController {
     private UserService userService;
@@ -26,11 +26,17 @@ public class UserController {
         this.startMenu.submitUsers(e -> {
             String username = this.startMenu.getUsername().trim();
 
-            if(username.isEmpty()) {
+            if (username.isEmpty()) {
                 username = "guest" + (int) Math.ceil(Math.random() * 100);
+            } else {
+                try (PrintWriter printWriter = new PrintWriter("src/assets/username.txt")) {
+                    printWriter.print(username);
+                } catch (FileNotFoundException ignored) {
+                }
             }
 
             this.userService.saveName(username);
+
 
             this.startMenu.reset(true);
         });

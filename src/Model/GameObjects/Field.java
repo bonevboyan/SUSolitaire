@@ -43,7 +43,7 @@ public class Field {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onTimerEvent();
-                increaseScore(-1);
+                increaseScore(-3);
             }
         });
         timer.start();
@@ -99,7 +99,7 @@ public class Field {
             cards.add(card);
 
             if (stack.addCards(cards)) {
-                increaseScore(5);
+                increaseScore(50);
                 checkVictory();
                 return true;
             } else {
@@ -122,15 +122,15 @@ public class Field {
 
             if (newStack.addCards(cards)) {
                 if (oldStackInfo.getStackType() == CardCollectionType.FOUNDATION && newStackInfo.getStackType() == CardCollectionType.PILE) {
-                    increaseScore(-15);
+                    increaseScore(-50);
                 } else {
                     if (newStackInfo.getStackType() == CardCollectionType.FOUNDATION && oldStackInfo.getStackType() == CardCollectionType.PILE) {
-                        increaseScore(10);
+                        increaseScore(100);
                     }
                     if (!oldStack.getCards().isEmpty()) {
                         if (!oldStack.getCards().peek().isOpen()) {
                             oldStack.getCards().peek().setOpen(true);
-                            increaseScore(5);
+                            increaseScore(50);
                         }
                     }
                     checkVictory();
@@ -150,7 +150,7 @@ public class Field {
         //stops if game isn't won
         try {
             for (int i = CardCollectionType.FOUNDATION.index; i < cardStacks.size(); i++) {
-                if (cardStacks.get(i).getCards().peek().getCardNumber() != CardNumber.ACE)
+                if (cardStacks.get(i).getCards().peek().getCardNumber() != CardNumber.KING)
                     return;
             }
         } catch (EmptyStackException e) {
