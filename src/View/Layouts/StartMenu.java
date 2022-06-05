@@ -113,9 +113,8 @@ public class StartMenu extends JPanel {
         DefaultTableModel defaultTableModel = (DefaultTableModel) topScores.getModel();
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
-        for (int i = 0; i < scores.size(); i++) {
-            Score score = scores.get(i);
-            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
+        for (Score score : scores) {
+            defaultTableModel.addRow(new String[]{score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 

@@ -4,6 +4,7 @@ import Model.Enums.CardCollectionType;
 import Model.GameObjects.Card;
 import Model.GameObjects.CardCollectionInfo;
 import Model.GameObjects.Field;
+import View.Sounds.Sound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class KlondikeCardPane extends JLayeredPane {
     Stack<JCard> downStock;
     Stack<JCard> upStock;
     Field field;
+    Sound player;
 
     public KlondikeCardPane() {
         setBackground(new Color(0, 81, 0));
@@ -82,6 +84,9 @@ public class KlondikeCardPane extends JLayeredPane {
 
         upStockPanel = new UpStockPanel(new Point(180, 20));
         add(upStockPanel);
+
+        //player to play sounds
+        player = new Sound();
     }
 
     MouseAdapter openCardListenerListener(JCard card) {
@@ -89,6 +94,8 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (field.openCardFromStock()) {
+                    player.playCardClick();
+
                     moveCard(card, new Point(190, 30));
                     upStock.push(downStock.pop());
                 }
@@ -112,6 +119,8 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (downStock.isEmpty()) {
+                    player.playCardClick();
+
                     field.restock();
                     while (!upStock.isEmpty()) {
                         downStock.push(upStock.pop());
@@ -145,6 +154,8 @@ public class KlondikeCardPane extends JLayeredPane {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (!originalCard.isOpen()) return;
+
+                player.playCardMove();
 
                 originalPosition = originalCard.getLocation();
                 currentPoint = SwingUtilities.convertPoint(originalCard, e.getPoint(), originalCard.getParent());
@@ -205,6 +216,8 @@ public class KlondikeCardPane extends JLayeredPane {
 
                 if (startLocationInfo.getStackType() == CardCollectionType.STOCK) {
                     if (field.moveCardFromStock(endLocationInfo)) {
+                        player.playCardMove();
+
                         moveCard(originalCard, currentPoint);
                         removeCardFromPastPile(originalPosition);
                         upStock.pop();
@@ -215,6 +228,8 @@ public class KlondikeCardPane extends JLayeredPane {
                 }
 
                 if (field.moveCards(cardsSet.size(), startLocationInfo, endLocationInfo)) {
+                    player.playCardMove();
+
                     for (JCard card : cardsSet) {
                         moveCard(card, currentPoint);
                         removeCardFromPastPile(originalPosition);

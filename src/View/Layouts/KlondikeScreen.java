@@ -3,6 +3,7 @@ package View.Layouts;
 import Model.Common.EndGameListener;
 import Model.Common.ScoreEventListener;
 import Model.Common.TimerEventListener;
+import View.Sounds.Sound;
 import View.UIElements.KlondikeCardPane;
 
 import javax.swing.*;
@@ -15,7 +16,6 @@ import java.awt.event.ComponentEvent;
 public class KlondikeScreen extends JPanel {
     private JButton exitButton;
     private JButton undoButton;
-
     private JButton resetButton;
 
     private JLabel scoreLabel;
@@ -23,14 +23,21 @@ public class KlondikeScreen extends JPanel {
 
     private KlondikeCardPane cardPane;
 
+    private Sound player;
+
     public KlondikeScreen() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         setBackground(new Color(0, 81, 0));
         setLayout(new GridBagLayout());
 
+        //initialize sound player to play sounds
+        player = new Sound();
+
+        //defaults
         gridBagConstraints.fill = GridBagConstraints.NONE;
         Insets defaultInsets = new Insets(5, 20, 5, 20);
 
+        //add button to exit to the game selection screen
         ImageIcon exitIcon = new ImageIcon("src/assets/X.png");
         ImageIcon exitIcon_selected = new ImageIcon("src/assets/X_selected.png");
 
@@ -47,11 +54,13 @@ public class KlondikeScreen extends JPanel {
         gridBagConstraints.insets = defaultInsets;
         add(exitButton, gridBagConstraints);
 
+//        unfinished undo button:
 //        undoButton = new JButton("Undo");
 //        gridBagConstraints.gridx = 1;
 //        gridBagConstraints.gridy = 0;
 //        add(undoButton, gridBagConstraints);
 
+        //add button to restart the game
         ImageIcon resetIcon = new ImageIcon("src/assets/reset.png");
         ImageIcon resetIcon_selected  = new ImageIcon("src/assets/reset_selected.png");
 
@@ -61,32 +70,35 @@ public class KlondikeScreen extends JPanel {
         resetButton.setBorder(null);
         resetButton.setRolloverIcon(resetIcon_selected);
 
-        resetButton.addActionListener(e -> resetGame());
-        gridBagConstraints.gridx = 3;
+        resetButton.addActionListener(e -> {player.playButtonClick(); resetGame();});
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         add(resetButton, gridBagConstraints);
 
+        //add label to keep track of score
         scoreLabel = new JLabel("Score 0");
         scoreLabel.setForeground(Color.white);
         scoreLabel.setFont(new Font("", Font.BOLD, 30));
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
         add(scoreLabel, gridBagConstraints);
 
+        //add label to show passed time
         timerLabel = new JLabel("0:00");
         timerLabel.setForeground(Color.white);
         timerLabel.setFont(new Font("", Font.BOLD, 30));
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         add(timerLabel, gridBagConstraints);
 
-
+        //reset the game when the screen is showed
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-                resetGame();
+                if (timerLabel.getText().equals("0:00")) //makes possible to exit and return to the current game
+                    resetGame();
             }
         });
     }
@@ -135,6 +147,7 @@ public class KlondikeScreen extends JPanel {
         cardPane.getField().subscribeToEndGameEvent(new EndGameListener() {
             @Override
             public void OnEvent() {
+                player.playVictory();
                 cardPane.getField().destroyTimers();
 
                 Object[] options = {"Exit", "Restart"};

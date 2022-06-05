@@ -1,4 +1,4 @@
-package View.SoundsAndShit;
+package View.Sounds;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +15,13 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class Sound implements LineListener {
+    private final String BUTTON_CLICK_SOUND_PATH = "src/assets/sounds/menuClick.wav";
+    private final String CARD_CLICK_SOUND_PATH = "src/assets/sounds/clickCard.wav";
+    private final String CARD_MOVE_SOUND_PATH = "src/assets/sounds/cardMove.wav";
+    private final String VICTORY_SOUND_PATH = "src/assets/sounds/victory.wav";
+    private boolean playCompleted;
 
-
-    boolean playCompleted;
-
-
-    void play(String audioFilePath) {
+    public void play(String audioFilePath) {
         File audioFile = new File(audioFilePath);
 
         try {
@@ -38,16 +39,16 @@ public class Sound implements LineListener {
 
             audioClip.start();
 
-            while (!playCompleted) {
-                // wait for the playback completes
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
+//            while (!playCompleted) {
+//                // wait for the playback completes
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
 
-            audioClip.close();
+            //audioClip.close();
 
         } catch (UnsupportedAudioFileException ex) {
             System.out.println("The specified audio file is not supported.");
@@ -62,6 +63,21 @@ public class Sound implements LineListener {
 
     }
 
+    public void playButtonClick() {
+        play(BUTTON_CLICK_SOUND_PATH);
+    }
+
+    public void playCardClick() {
+        play(CARD_CLICK_SOUND_PATH);
+    }
+
+    public void playCardMove() {
+        play(CARD_MOVE_SOUND_PATH);
+    }
+
+    public void playVictory() {
+        play(VICTORY_SOUND_PATH);
+    }
 
     @Override
     public void update(LineEvent event) {
@@ -82,8 +98,5 @@ public class Sound implements LineListener {
     //* Sound player = new Sound();
     //* player.play(audioFilePath);
     //* }
-
-
-
 }
 
