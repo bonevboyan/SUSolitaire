@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,7 +24,11 @@ public class  Database {
     public List<Score> loadScores() throws IOException {
         String text = getScoresString();
 
-        return Arrays.stream(text.split(" ")).map(x -> x.split(",")).map(x -> new Score(Integer.parseInt(x[1]), x[0])).toList();
+        try {
+            return Arrays.stream(text.split(" ")).map(x -> x.split(",")).map(x -> new Score(Integer.parseInt(x[1]), x[0])).toList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     // reads user from database file

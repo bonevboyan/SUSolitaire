@@ -7,7 +7,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Scanner;
 
 public class StartMenu extends JPanel {
     private JPlaceholderTextField usernameField;
@@ -60,6 +63,10 @@ public class StartMenu extends JPanel {
         gridBagConstraints.gridy = 1;
         usernameField.setPlaceholder("Username...");
         usernameField.setFont(new Font(usernameField.getFont().getName(), usernameField.getFont().getStyle(), 30));
+
+        try (Scanner scanner = new Scanner(new File("src/assets/username.txt"))) {
+            usernameField.setText(scanner.nextLine());
+        } catch (FileNotFoundException ignored) {}
 
         add(usernameField, gridBagConstraints);
 
@@ -114,7 +121,7 @@ public class StartMenu extends JPanel {
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
         for (Score score : scores) {
-            defaultTableModel.addRow(new String[]{score.getUsername(), String.valueOf(score.getPoints())});
+            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 
