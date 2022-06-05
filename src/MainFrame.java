@@ -9,7 +9,7 @@ import java.awt.*;
 public class MainFrame extends JFrame {
     // frame width & height
     public int FRAME_WIDTH = 1300;
-    public int FRAME_HEIGHT = 800;
+    public int FRAME_HEIGHT = 1000;
 
     // Card layout for switching view
     private CardLayout cardLayout;

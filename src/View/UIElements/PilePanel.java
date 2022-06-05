@@ -10,7 +10,7 @@ public class PilePanel extends JPanel {
     private int cardAmount = 0;
 
     public PilePanel(Point coordinates) {
-        setBackground(new Color(0, 37, 0));
+        setBackground(new Color(0, 81, 0)); // set green to 37 to visualises the piles
         setBounds(coordinates.x, coordinates.y, WIDTH, height);
     }
 

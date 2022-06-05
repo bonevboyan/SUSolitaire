@@ -27,7 +27,11 @@ public class StartMenu extends JPanel {
     public StartMenu() {
         JLabel title = new JLabel("SUSolitaire");
         title.setForeground(Color.white);
-        title.setFont(new Font("", Font.BOLD, 30));
+        title.setFont(new Font("Serif", Font.BOLD, 120));
+
+        JLabel topScoresLabel = new JLabel("Top Scores:");
+        topScoresLabel.setForeground(Color.white);
+        topScoresLabel.setFont(new Font("", Font.BOLD, 30));
 
         setBackground(new Color(0, 81, 0));
 
@@ -37,6 +41,7 @@ public class StartMenu extends JPanel {
 
         //initialize buttons
         playButton = new JButton("Play");
+        playButton.setFont(new Font("", Font.BOLD, 50));
         playButton.setPreferredSize(new Dimension(500, 100));
         scoresButton = new JButton("View All Scores");
         scoresButton.setPreferredSize(new Dimension(200, 40));
@@ -61,9 +66,17 @@ public class StartMenu extends JPanel {
 
         add(title, gridBagConstraints);
 
+        //top scores label
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
+
+        add(topScoresLabel, gridBagConstraints);
+
         //username field
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         usernameField.setPlaceholder("Username...");
         usernameField.setFont(new Font(usernameField.getFont().getName(), usernameField.getFont().getStyle(), 30));
 

@@ -8,7 +8,7 @@ public class UpStockPanel extends JPanel {
     private final int HEIGHT = 175;
 
     public UpStockPanel(Point coordinates) {
-        setBackground(new Color(0, 37, 0));
+        setBackground(new Color(0, 81, 0)); // set green to 37 to visualises the up stock
         setBounds(coordinates.x, coordinates.y, WIDTH, HEIGHT);
     }
 }
