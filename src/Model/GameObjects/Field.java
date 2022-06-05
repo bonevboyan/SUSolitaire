@@ -39,17 +39,15 @@ public class Field {
 
         gameTimer = new GameTimer();
 
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onTimerEvent();
-                increaseScore(-3);
-            }
+        timer = new Timer(1000, e -> {
+            onTimerEvent();
+            increaseScore(-3);
         });
         timer.start();
 
         score = 0;
 
+        //add cards to piles
         Pack pack = new Pack();
 
         for (int i = 1; i <= 7; i++) {
@@ -61,13 +59,16 @@ public class Field {
             cards.clear();
         }
 
+        //the remaining cards go to the down stock
         downStock.addAll(pack.getPack());
 
+        //create foundations
         for (int i = 0; i < 4; i++) {
             cardStacks.add(new Foundation());
         }
     }
 
+    //return the cards from the up stock to the down stock
     public void restock() {
         while (!upStock.isEmpty()) {
             downStock.push(upStock.pop());
@@ -77,6 +78,7 @@ public class Field {
         increaseScore(-100);
     }
 
+    //returns if the move was a success
     public boolean openCardFromStock() {
         try {
             var card = downStock.pop();
@@ -89,9 +91,11 @@ public class Field {
         }
     }
 
+    //returns if the move was a success
     public boolean moveCardFromStock(CardCollectionInfo stackInfo) {
         try {
-            var stack = this.cardStacks.get(stackInfo.getIndex() + stackInfo.getStackType().index);
+            //gets needed pile or foundation
+            var stack = this.cardStacks.get(stackInfo.getIndex() + stackInfo.getStackType().getIndex());
 
             var card = upStock.pop();
 
@@ -103,6 +107,7 @@ public class Field {
                 checkVictory();
                 return true;
             } else {
+                //undo changes if move is illegal
                 upStock.add(card);
                 return false;
             }
@@ -112,10 +117,12 @@ public class Field {
 
     }
 
+    //returns if the move was a success
     public boolean moveCards(int count, CardCollectionInfo oldStackInfo, CardCollectionInfo newStackInfo) {
         try {
-            var oldStack = this.cardStacks.get(oldStackInfo.getIndex() + oldStackInfo.getStackType().index);
-            var newStack = this.cardStacks.get(newStackInfo.getIndex() + newStackInfo.getStackType().index);
+            //gets needed piles or foundations
+            var oldStack = this.cardStacks.get(oldStackInfo.getIndex() + oldStackInfo.getStackType().getIndex());
+            var newStack = this.cardStacks.get(newStackInfo.getIndex() + newStackInfo.getStackType().getIndex());
 
             var cards = oldStack.removeLastCards(count);
             if (cards == null) return false;
@@ -138,6 +145,7 @@ public class Field {
 
                 return true;
             } else {
+                //undo changes if move is illegal
                 oldStack.getCards().addAll(cards);
                 return false;
             }
@@ -149,7 +157,7 @@ public class Field {
     public void checkVictory() {
         //stops if game isn't won
         try {
-            for (int i = CardCollectionType.FOUNDATION.index; i < cardStacks.size(); i++) {
+            for (int i = CardCollectionType.FOUNDATION.getIndex(); i < cardStacks.size(); i++) {
                 if (cardStacks.get(i).getCards().peek().getCardNumber() != CardNumber.KING)
                     return;
             }
@@ -161,6 +169,7 @@ public class Field {
         onEndGameEvent();
     }
 
+    //getters
     public List<Pile> getPiles() {
         return cardStacks.subList(0, 7).stream().map(x -> (Pile) x).toList();
     }
@@ -169,6 +178,7 @@ public class Field {
         return downStock;
     }
 
+    //set events to communicate with view for score, timer and end of game
     public void subscribeToScoreEvent(ScoreEventListener eventListener) {
         scoreEventListeners.add(eventListener);
     }
@@ -202,6 +212,7 @@ public class Field {
         onScoreEvent();
     }
 
+    //stops the timers
     public void destroyTimers() {
         timer = new Timer(0, null);
         gameTimer = new GameTimer();

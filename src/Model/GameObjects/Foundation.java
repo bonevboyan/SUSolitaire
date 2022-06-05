@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class Foundation extends CardStackableCollection {
+    //needed suit to place cards
     private CardSuit suit;
 
     public Foundation() {
@@ -25,6 +26,7 @@ public class Foundation extends CardStackableCollection {
         this.suit = suit;
     }
 
+    //returns if the move was successful
     @Override
     public boolean addCards(List<Card> newCards) {
         if(newCards.size() != 1) return false;

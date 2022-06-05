@@ -14,12 +14,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
+//extension of JLayeredPane to show overlapping cards
 public class KlondikeCardPane extends JLayeredPane {
     ArrayList<PilePanel> pilePanels;
     ArrayList<FoundationPanel> foundationPanels;
     DownStockPanel downStockPanel;
     UpStockPanel upStockPanel;
 
+    //list of the lists of the piles with cards
     ArrayList<ArrayList<JCard>> pileCards;
     Stack<JCard> downStock;
     Stack<JCard> upStock;
@@ -37,8 +39,10 @@ public class KlondikeCardPane extends JLayeredPane {
         downStock = new Stack<>();
         upStock = new Stack<>();
 
+        //initialize game
         field = new Field();
 
+        //add pile panels
         for (int i = 0; i < 7; i++) {
             PilePanel pilePanel = new PilePanel(new Point(i * 180, 250));
 
@@ -50,8 +54,9 @@ public class KlondikeCardPane extends JLayeredPane {
             pileCards.add(new ArrayList<>());
             int counter = 0;
             for (Card card : pile.getCards()) {
-                JCard jCard = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 25), card, pilePanel);
+                JCard jCard = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 25), card);
                 add(jCard);
+                //set card to its appropriate location
                 moveCard(jCard, jCard.getLocation());
                 counter++;
 
@@ -59,6 +64,7 @@ public class KlondikeCardPane extends JLayeredPane {
             }
         }
 
+        //add foundation panels
         for (int i = 0; i < 4; i++) {
             FoundationPanel foundationPanel = new FoundationPanel(new Point(540 + i * 180, 20));
 
@@ -73,13 +79,13 @@ public class KlondikeCardPane extends JLayeredPane {
         var downStock = field.getDownStock();
 
         for (Card cardValue : downStock) {
-            JCard card = new JCard(new Point(downStockPanel.getX() + 10, downStockPanel.getY() + 10), cardValue, downStockPanel);
+            JCard card = new JCard(new Point(downStockPanel.getX() + 10, downStockPanel.getY() + 10), cardValue);
             card.setLocation(downStockPanel.getX() + 10, downStockPanel.getY() + 10);
             this.downStock.push(card);
 
             add(card);
             moveToFront(card);
-            card.setMouseListeners(openCardListenerListener(card));
+            card.setMouseListeners(openCardListener(card));
         }
 
         upStockPanel = new UpStockPanel(new Point(180, 20));
@@ -89,8 +95,9 @@ public class KlondikeCardPane extends JLayeredPane {
         player = new Sound();
     }
 
-    MouseAdapter openCardListenerListener(JCard card) {
+    MouseAdapter openCardListener(JCard card) {
         return new MouseAdapter() {
+            //opens card
             @Override
             public void mousePressed(MouseEvent e) {
                 if (field.openCardFromStock()) {
@@ -101,6 +108,7 @@ public class KlondikeCardPane extends JLayeredPane {
                 }
             }
 
+            //resets card's listeners
             @Override
             public void mouseReleased(MouseEvent e) {
                 for (MouseListener mouseListener : card.getMouseListeners()) {
@@ -114,6 +122,7 @@ public class KlondikeCardPane extends JLayeredPane {
         };
     }
 
+    //listener for click to restock the down stock
     MouseAdapter restockListener() {
         return new MouseAdapter() {
             @Override
@@ -121,12 +130,14 @@ public class KlondikeCardPane extends JLayeredPane {
                 if (downStock.isEmpty()) {
                     player.playCardClick();
 
+                    //true restock in game's logic
                     field.restock();
                     while (!upStock.isEmpty()) {
                         downStock.push(upStock.pop());
                         moveToFront(downStock.peek());
                     }
 
+                    //reset card listeners and position
                     downStock.forEach(x -> {
                         x.setLocation(new Point(10, 30));
 
@@ -136,7 +147,7 @@ public class KlondikeCardPane extends JLayeredPane {
                         for (MouseMotionListener mouseListener : x.getMouseMotionListeners()) {
                             x.removeMouseMotionListener(mouseListener);
                         }
-                        x.setMouseListeners(openCardListenerListener(x));
+                        x.setMouseListeners(openCardListener(x));
                     });
                 }
             }
@@ -148,20 +159,24 @@ public class KlondikeCardPane extends JLayeredPane {
         return new MouseAdapter() {
             Point originalPosition;
             Point currentPoint;
+            //list of all the cards being dragged
             List<JCard> cardsSet;
 
-            //set initial coordinates
             @Override
             public void mousePressed(MouseEvent e) {
+                //move legal only if card is open
                 if (!originalCard.isOpen()) return;
 
+                //sound
                 player.playCardMove();
 
+                //set initial coordinates
                 originalPosition = originalCard.getLocation();
                 currentPoint = SwingUtilities.convertPoint(originalCard, e.getPoint(), originalCard.getParent());
 
                 CardCollectionInfo stackInfo = getStackInfo(getPanel(currentPoint));
 
+                //set cards set of cards below the card clicked
                 assert stackInfo != null;
                 if (stackInfo.getStackType() == CardCollectionType.PILE) {
                     ArrayList<JCard> listOfDraggedCard = pileCards.get(stackInfo.getIndex());
@@ -174,9 +189,10 @@ public class KlondikeCardPane extends JLayeredPane {
                 for (JCard card : cardsSet) moveToFront(card);
             }
 
-            //move card when dragged
+            //move all cards from the set when dragged
             @Override
             public void mouseDragged(MouseEvent e) {
+                //move legal only if card is open
                 if (!originalCard.isOpen()) return;
 
                 Point location = SwingUtilities.convertPoint(originalCard, e.getPoint(), originalCard.getParent());
@@ -192,21 +208,25 @@ public class KlondikeCardPane extends JLayeredPane {
                 }
             }
 
-            //reset on release
+            //set cards to their new position
             @Override
             public void mouseReleased(MouseEvent e) {
+                //move legal only if card is open
                 if (!originalCard.isOpen()) return;
 
+                //get information for start and end position
                 var startLocation = getPanel(originalPosition);
                 var endLocation = getPanel(currentPoint);
 
                 var startLocationInfo = getStackInfo(startLocation);
                 var endLocationInfo = getStackInfo(endLocation);
 
+                //checks if move is appropriate
                 if (startLocation == endLocation ||
                         startLocationInfo == null ||
                         endLocationInfo == null ||
                         endLocation instanceof UpStockPanel) {
+                    //resets cards to the original position
                     for (JCard card : cardsSet) {
                         card.setLocation(originalPosition);
                         originalPosition.translate(0, 20);
@@ -214,6 +234,7 @@ public class KlondikeCardPane extends JLayeredPane {
                     return;
                 }
 
+                //checks if move a single from stock follows the rules
                 if (startLocationInfo.getStackType() == CardCollectionType.STOCK) {
                     if (field.moveCardFromStock(endLocationInfo)) {
                         player.playCardMove();
@@ -222,11 +243,13 @@ public class KlondikeCardPane extends JLayeredPane {
                         removeCardFromPastPile(originalPosition);
                         upStock.pop();
                     } else {
+                        //resets card to the original position
                         originalCard.setLocation(originalPosition);
                     }
                     return;
                 }
 
+                //checks if other possible move follows the rules
                 if (field.moveCards(cardsSet.size(), startLocationInfo, endLocationInfo)) {
                     player.playCardMove();
 
@@ -237,17 +260,16 @@ public class KlondikeCardPane extends JLayeredPane {
                     pileCards.get(Objects.requireNonNull(getStackInfo(startLocation)).getIndex()).removeAll(cardsSet);
                 } else {
                     for (JCard card : cardsSet) {
+                        //resets cards to the original position
                         card.setLocation(originalPosition);
                         originalPosition.translate(0, 20);
                     }
                 }
-
-                currentPoint = null;
             }
         };
     }
 
-    //finds the index of the pile int the list by given coordinates of the pile
+    //finds the panel by given coordinates
     private JPanel getPanel(Point location) {
         for (PilePanel pilePanel : pilePanels) {
             if (pilePanel.getBounds().contains(location)) {
@@ -275,12 +297,12 @@ public class KlondikeCardPane extends JLayeredPane {
         if (dropLocation == null)
             return false;
 
-        //PilePanel pilePanel = pilePanels.get(pileIndex);
         if (dropLocation instanceof PilePanel dropPile) {
             card.setLocation(dropPile.getX() + 10, dropPile.getY() + dropPile.getCardAmount() * 25);
             dropPile.incrementCardAmount(1);
             pileCards.get(Objects.requireNonNull(getStackInfo(dropPile)).getIndex()).add(card);
         } else {
+            //moves card to foundation
             card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);
         }
 
@@ -288,6 +310,7 @@ public class KlondikeCardPane extends JLayeredPane {
         return true;
     }
 
+    //updates pile's card amount
     private void removeCardFromPastPile(Point pastLocation) {
         var location = getPanel(pastLocation);
 
@@ -296,6 +319,7 @@ public class KlondikeCardPane extends JLayeredPane {
         }
     }
 
+    //gets info for the card collection by given panel
     private CardCollectionInfo getStackInfo(JPanel panel) {
         try {
             if (panel instanceof PilePanel pilePanel) {

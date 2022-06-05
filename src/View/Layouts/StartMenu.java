@@ -43,10 +43,12 @@ public class StartMenu extends JPanel {
         playButton = new JButton("Play");
         playButton.setFont(new Font("", Font.BOLD, 50));
         playButton.setPreferredSize(new Dimension(500, 100));
-        scoresButton = new JButton("View All Scores");
+        scoresButton = new JButton("Show Leaderboard");
         scoresButton.setPreferredSize(new Dimension(200, 40));
+        scoresButton.setFont(new Font("", Font.BOLD, 15));
         creditsButton = new JButton("Credits");
         creditsButton.setPreferredSize(new Dimension(200, 40));
+        creditsButton.setFont(new Font("", Font.BOLD, 15));
 
         // space between fields
         Insets fieldsInset = new Insets(0, 20, 10, 0);
@@ -80,6 +82,7 @@ public class StartMenu extends JPanel {
         usernameField.setPlaceholder("Username...");
         usernameField.setFont(new Font(usernameField.getFont().getName(), usernameField.getFont().getStyle(), 30));
 
+        //autofill username from past games
         try (Scanner scanner = new Scanner(new File("src/assets/username.txt"))) {
             usernameField.setText(scanner.nextLine());
         } catch (FileNotFoundException ignored) {}
@@ -129,7 +132,6 @@ public class StartMenu extends JPanel {
         return usernameField.getText();
     }
 
-
     // event listeners for buttons
     public void submitUsers(ActionListener actionListener) {
         playButton.addActionListener(actionListener);
@@ -150,13 +152,6 @@ public class StartMenu extends JPanel {
 
         for (Score score : scores) {
             defaultTableModel.addRow(new String[]{score.getUsername(), String.valueOf(score.getPoints())});
-        }
-    }
-
-    // reset fields
-    public void reset(boolean bln) {
-        if (bln) {
-            usernameField.setText("");
         }
     }
 }

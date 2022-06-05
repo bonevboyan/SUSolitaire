@@ -3,6 +3,7 @@ package Model.Common;
 import java.util.List;
 
 public class Sorter {
+    //bubble sort a list - for leaderboard
     public static <E extends Comparable<E>> void sortList(List<E> list) {
         int n = list.size();
         E temp;

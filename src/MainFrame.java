@@ -17,11 +17,13 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("SUSolitaire");
         cardLayout = new CardLayout();
+
+        // initialize controls and windows
         StartMenu startMenu = new StartMenu();
-        UserDetails userDetails = new UserDetails();
         GameSelectionScreen gameSelectionScreen = new GameSelectionScreen();
         CreditsScreen creditsScreen = new CreditsScreen();
         KlondikeScreen klondikeScreen = new KlondikeScreen();
+        UserDetails userDetails = new UserDetails();
         // sets our layout as a card layout
         setLayout(cardLayout);
 
@@ -35,7 +37,7 @@ public class MainFrame extends JFrame {
         add(creditsScreen, "credits");
         add(klondikeScreen, "klondike");
 
-        //create sound player
+        // create sound player
         Sound player = new Sound();
 
         // switch view according to its constraints on click

@@ -37,7 +37,6 @@ public class UserDetails extends JPanel {
         toolBar.add(backButton);
         toolBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, toolBar.getMinimumSize().height));
         add(userTableScroll);
-
     }
 
     // gets users from database and loads to table
@@ -46,9 +45,8 @@ public class UserDetails extends JPanel {
         defaultTableModel.setRowCount(0);
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
-        for (int i = 0; i < scores.size(); i++) {
-            Score score = scores.get(i);
-            defaultTableModel.addRow(new String[] {score.getUsername(), String.valueOf(score.getPoints())});
+        for (Score score : scores) {
+            defaultTableModel.addRow(new String[]{score.getUsername(), String.valueOf(score.getPoints())});
         }
     }
 

@@ -15,6 +15,7 @@ public class Pile extends CardStackableCollection {
         this.cards.peek().setOpen(true);
     }
 
+    //returns if the move was successful
     public boolean addCards(List<Card> cards) {
         if (!isMoveAllowed(cards.get(0))) return false;
 

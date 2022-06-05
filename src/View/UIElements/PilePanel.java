@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PilePanel extends JPanel {
+    //panel for the piles of cards
     private final int WIDTH = 130;
     private int height = 180;
 
@@ -18,6 +19,8 @@ public class PilePanel extends JPanel {
         this(coordinates);
         this.cardAmount = cardAmount;
     }
+
+    //getters and setters
 
     public int getCardAmount() {
         return cardAmount;

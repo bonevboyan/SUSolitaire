@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FoundationPanel extends JPanel {
+    //visualisation of the foundations
     private final int WIDTH = 130;
     private final int HEIGHT = 175;
 

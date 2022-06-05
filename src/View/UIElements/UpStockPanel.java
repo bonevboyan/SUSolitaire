@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class UpStockPanel extends JPanel {
+    //panel for the open stock cards
     private final int WIDTH = 130;
     private final int HEIGHT = 175;
 

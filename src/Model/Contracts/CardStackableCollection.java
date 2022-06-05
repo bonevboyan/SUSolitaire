@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Stack;
 
 public abstract class CardStackableCollection {
+    //abstract class to unify piles and foundations
     protected Stack<Card> cards;
 
     public boolean addCards(List<Card> newCards) {

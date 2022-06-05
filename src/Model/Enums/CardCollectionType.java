@@ -5,9 +5,13 @@ public enum CardCollectionType {
     FOUNDATION(7),
     STOCK(9);
 
-    public int index;
+    private int index;
 
     CardCollectionType(int index){
         this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

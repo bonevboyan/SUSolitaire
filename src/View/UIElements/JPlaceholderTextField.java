@@ -5,20 +5,10 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.Document;
 
-@SuppressWarnings("serial")
 public class JPlaceholderTextField extends JTextField {
-
-    public static void main(final String[] args) {
-        final JPlaceholderTextField tf = new JPlaceholderTextField("");
-        tf.setColumns(20);
-        tf.setPlaceholder("All your base are belong to us!");
-        final Font f = tf.getFont();
-        tf.setFont(new Font(f.getName(), f.getStyle(), 30));
-        JOptionPane.showMessageDialog(null, tf);
-    }
-
     private String placeholder;
 
+    //empty constructor
     public JPlaceholderTextField() {
     }
 

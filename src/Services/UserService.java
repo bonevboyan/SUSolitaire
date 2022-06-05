@@ -16,10 +16,10 @@ public class UserService {
         this.db = new Database();
     }
 
-    public void sendResult(int score){
-        try{
+    public void sendResult(int score) {
+        try {
             this.db.saveScore(new Score(score, username));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -28,18 +28,20 @@ public class UserService {
         this.username = name;
     }
 
+    //returns the scores sorted
     public List<Score> getAllScores() {
         try {
-            return this.db.loadScores();
+            ArrayList<Score> list = new ArrayList<>(this.db.loadScores());
+            Sorter.sortList(list);
+            return list;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
     }
 
+    //sends the top 5 scores to the start menu
     public List<Score> topScores() {
-        ArrayList<Score> list = new ArrayList<>(getAllScores());
-        Sorter.sortList(list);
-        return list.stream().limit(5).toList();
+        return getAllScores().stream().limit(5).toList();
     }
 }

@@ -21,7 +21,6 @@ public class CardFaceFactory {
         try {
             image = ImageIO.read(new File(IMAGE_PATH));
         } catch (Exception e) {
-            System.out.println("haha");
             Graphics2D g2d = (Graphics2D) g;
             g2d.fillRect(0, 0, 40, 40);
             return;
@@ -30,6 +29,7 @@ public class CardFaceFactory {
         assert image != null;
 
         Graphics2D g2d = (Graphics2D) g;
+
         // draw the image using graphics
         int pixelXPosition = getPixelXPositionByNumber(number);
         int pixelYPosition = getPixelYPositionBySuit(suit);
@@ -42,67 +42,31 @@ public class CardFaceFactory {
 
     // map Y positions
     private static int getPixelYPositionBySuit(CardSuit suit) {
-        switch (suit) {
-            case CLUBS -> {
-                return 1;
-            }
-            case SPADES -> {
-                return 99;
-            }
-            case HEARTS -> {
-                return 197;
-            }
-            case DIAMONDS -> {
-                return 295;
-            }
-        }
-        return 0;
+        return switch (suit) {
+            case CLUBS ->  1;
+            case SPADES -> 99;
+            case HEARTS -> 197;
+            case DIAMONDS -> 295;
+        };
     }
 
     // map X positions
     private static int getPixelXPositionByNumber(CardNumber number) {
-        switch (number) {
-            case ACE -> {
-                return 1;
-            }
-            case TWO -> {
-                return 74;
-            }
-            case THREE -> {
-                return 147;
-            }
-            case FOUR -> {
-                return 220;
-            }
-            case FIVE -> {
-                return 293;
-            }
-            case SIX -> {
-                return 366;
-            }
-            case SEVEN -> {
-                return 439;
-            }
-            case EIGHT -> {
-                return 512;
-            }
-            case NINE -> {
-                return 585;
-            }
-            case TEN -> {
-                return 658;
-            }
-            case JACK -> {
-                return 731;
-            }
-            case QUEEN -> {
-                return 804;
-            }
-            case KING -> {
-                return 877;
-            }
-        }
-        return 0;
+        return switch (number) {
+            case ACE -> 1;
+            case TWO -> 74;
+            case THREE -> 147;
+            case FOUR -> 220;
+            case FIVE -> 293;
+            case SIX -> 366;
+            case SEVEN -> 439;
+            case EIGHT -> 512;
+            case NINE -> 585;
+            case TEN -> 658;
+            case JACK -> 731;
+            case QUEEN -> 804;
+            case KING -> 877;
+        };
     }
 
 }

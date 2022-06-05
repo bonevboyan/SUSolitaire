@@ -27,8 +27,10 @@ public class UserController {
             String username = this.startMenu.getUsername().trim().replaceAll("[ ,]", "");
 
             if (username.isEmpty()) {
+                //set username as guest
                 username = "guest" + (int) Math.ceil(Math.random() * 100);
             } else {
+                //save username
                 try (PrintWriter printWriter = new PrintWriter("src/assets/username.txt")) {
                     printWriter.print(username);
                 } catch (FileNotFoundException ignored) {
@@ -36,9 +38,6 @@ public class UserController {
             }
 
             this.userService.saveName(username);
-
-
-            this.startMenu.reset(true);
         });
 
         this.startMenu.viewUsers(e -> {

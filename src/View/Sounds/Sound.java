@@ -19,8 +19,9 @@ public class Sound implements LineListener {
     private final String CARD_CLICK_SOUND_PATH = "src/assets/sounds/clickCard.wav";
     private final String CARD_MOVE_SOUND_PATH = "src/assets/sounds/cardMove.wav";
     private final String VICTORY_SOUND_PATH = "src/assets/sounds/victory.wav";
-    private boolean playCompleted;
+    //private boolean playCompleted;
 
+    //play sound by given file path
     public void play(String audioFilePath) {
         File audioFile = new File(audioFilePath);
 
@@ -63,6 +64,7 @@ public class Sound implements LineListener {
 
     }
 
+    //common sounds
     public void playButtonClick() {
         play(BUTTON_CLICK_SOUND_PATH);
     }
@@ -81,15 +83,15 @@ public class Sound implements LineListener {
 
     @Override
     public void update(LineEvent event) {
-        LineEvent.Type type = event.getType();
+        //LineEvent.Type type = event.getType();
 
-        if (type == LineEvent.Type.START) {
-            System.out.println("Playback started.");
+        //if (type == LineEvent.Type.START) {
+            //System.out.println("Playback started.");
 
-        } else if (type == LineEvent.Type.STOP) {
-            playCompleted = true;
-            System.out.println("Playback completed.");
-        }
+        //} else if (type == LineEvent.Type.STOP) {
+            //playCompleted = true;
+            //System.out.println("Playback completed.");
+        //}
 
     }
     //* Example of playing a music file

@@ -7,6 +7,7 @@ import Model.GameObjects.Card;
 import java.util.Collections;
 import java.util.LinkedList;
 
+//a pack with all cards, shuffled
 public class Pack {
     public static final int NUMBER_OF_CARDS_IN_PACK = 52;
     public static final int NUMBER_OF_SUITS = 4;

@@ -1,6 +1,7 @@
 package Model.Common;
 
 public class GameTimer {
+    //stopwatch to measure playtime
     private long startTimer = 0;
     private long stopTimer = 0;
     private boolean stopWatchRunning = false;

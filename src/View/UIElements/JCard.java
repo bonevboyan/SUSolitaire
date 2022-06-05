@@ -8,15 +8,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 public class JCard extends JLabel {
+    //visualisation of a card
     private Card card;
     private ImageIcon cardBack;
     private ImageIcon cardBackResized;
 
-    private JPanel location;
-
-    public JCard(Point coordinates, Card card, JPanel location) {
+    public JCard(Point coordinates, Card card) {
         this.card = card;
-        this.location = location;
 
         //resize icon to fit panel
         cardBack = new ImageIcon("src\\assets\\card_back_test.png");

@@ -8,7 +8,6 @@ import View.UIElements.KlondikeCardPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -108,6 +107,7 @@ public class KlondikeScreen extends JPanel {
         saveButton = new JButton();
     }
 
+    //add event listener to exit button
     public void exitButton(ActionListener actionListener) {
         exitButton.addActionListener(actionListener);
     }
@@ -134,13 +134,14 @@ public class KlondikeScreen extends JPanel {
         add(cardPane, gridBagConstraints);
 
         scoreLabel.setText("Score 0");
+
+        //subscribe to all events
         cardPane.getField().subscribeToScoreEvent(new ScoreEventListener() {
             @Override
             public void OnEvent(int score) {
                 scoreLabel.setText("Score " + score);
             }
         });
-
 
         cardPane.getField().subscribeToTimerEvent(new TimerEventListener() {
             @Override
@@ -150,6 +151,7 @@ public class KlondikeScreen extends JPanel {
         });
 
         cardPane.getField().subscribeToEndGameEvent(new EndGameListener() {
+            //event when the game is finished
             @Override
             public void OnEvent() {
                 player.playVictory();
@@ -160,6 +162,7 @@ public class KlondikeScreen extends JPanel {
                         "Final score: " + scoreLabel.getText() + '\n' +
                         "Time: " + timerLabel.getText();
 
+                //show victory popup with given time to finish the card move
                 timer = new Timer(100, e -> {
                     int option = JOptionPane.showOptionDialog(cardPane,
                             endMessage,
@@ -194,6 +197,7 @@ public class KlondikeScreen extends JPanel {
         return Integer.parseInt(this.scoreLabel.getText().split(" ")[1]);
     }
 
+    //invisible save button for its action listener for the end of the game
     public void saveResult(ActionListener actionListener) {
         saveButton.addActionListener(actionListener);
     }

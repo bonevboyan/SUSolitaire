@@ -1,5 +1,3 @@
-import Model.GameObjects.Field;
-
 import javax.swing.*;
 
 public class App {

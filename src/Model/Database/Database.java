@@ -38,7 +38,7 @@ public class  Database {
         HttpURLConnection http = (HttpURLConnection)url.openConnection();
         http.setRequestProperty("Content-Type", "application/json");
         http.setRequestProperty("Authorization", "token " + DataConstants.GITHUB_TOKEN);
-        BufferedReader br = null;
+        BufferedReader br;
         if (100 <= http.getResponseCode() && http.getResponseCode() <= 399) {
             br = new BufferedReader(new InputStreamReader(http.getInputStream()));
         } else {

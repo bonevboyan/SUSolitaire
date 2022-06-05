@@ -15,23 +15,21 @@ public class GameSelectionScreen extends JPanel {
 
     private JButton backButton;
 
-
-
     public GameSelectionScreen() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         setBackground(new Color(0, 81, 0));
         setLayout(new GridBagLayout());
 
-        ImageIcon klondikeImage = new ImageIcon("src/assets/klondike.png");
-
+        //add all game buttons
         gamesButtonsList = new ArrayList<>();
         gamesButtonsList.add(new GameSelectionButton("Klondike", "src/assets/klondike.png"));
-        gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow));
+        //gamesButtonsList.add(new GameSelectionButton("Pyramids", Color.yellow)); - button for the pyramids game
 
         gamesButtonsPanel = new JPanel();
         gamesButtonsPanel.setLayout(new GridBagLayout());
         gamesButtonsPanel.setBackground(new Color(0, 81, 0));
-        gamesButtonsPanel.setPreferredSize(new Dimension((GameSelectionButton.WIDTH + 50) * gamesButtonsList.size(), GameSelectionButton.HEIGHT + 100));
+        gamesButtonsPanel.setPreferredSize(new Dimension((GameSelectionButton.WIDTH + 50) * gamesButtonsList.size(),
+                GameSelectionButton.HEIGHT + 100));
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         gridBagConstraints.fill = GridBagConstraints.BOTH;
 
@@ -43,6 +41,7 @@ public class GameSelectionScreen extends JPanel {
         Insets defaultInsets = new Insets(5, 5, 5, 5);
 
         backButton = new JButton("Go Back");
+
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0;
@@ -50,10 +49,12 @@ public class GameSelectionScreen extends JPanel {
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.insets = defaultInsets;
+
         add(backButton, gridBagConstraints);
 
         gamesScrollPane = new JScrollPane(gamesButtonsPanel);
         gamesScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1;
@@ -62,16 +63,16 @@ public class GameSelectionScreen extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = defaultInsets;
         //gamesScrollPane.setPreferredSize(new Dimension(1000, gamesButtonsPanel.getHeight()));
+
         add(gamesScrollPane, gridBagConstraints);
-
-
-
     }
 
+    //add event listener to back button
     public void backButton(ActionListener actionListener) {
         backButton.addActionListener(actionListener);
     }
 
+    //add event listener to a game button
     public void gameButton(int index, ActionListener actionListener) {
         gamesButtonsList.get(index).addActionListener(actionListener);
     }

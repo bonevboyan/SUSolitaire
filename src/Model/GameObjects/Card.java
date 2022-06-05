@@ -8,6 +8,7 @@ public class Card {
     private CardNumber cardNumber;
     private boolean isOpen;
 
+    //empty constructor
     public Card() {
     }
 
