@@ -1,5 +1,6 @@
 package Services;
 
+import Model.Common.Sorter;
 import Model.Database.Database;
 import Model.Database.Models.Score;
 
@@ -37,6 +38,8 @@ public class UserService {
     }
 
     public List<Score> topScores() {
-        return getAllScores().stream().sorted().limit(5).toList();
+        ArrayList<Score> list = new ArrayList<>(getAllScores());
+        Sorter.sortList(list);
+        return list.stream().limit(5).toList();
     }
 }
