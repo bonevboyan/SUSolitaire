@@ -1,5 +1,5 @@
-import Controller.KlondikeController;
 import Controller.UserController;
+import Services.UserService;
 import View.Layouts.*;
 import View.Sounds.Sound;
 
@@ -26,8 +26,7 @@ public class MainFrame extends JFrame {
         setLayout(cardLayout);
 
         // initialize user controller
-        new UserController(startMenu, userDetails);
-        new KlondikeController(klondikeScreen);
+        new UserController(startMenu, userDetails, klondikeScreen, new UserService());
 
         // adds view to card layout with unique constraints
         add(startMenu, "start menu");

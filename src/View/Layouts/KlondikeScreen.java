@@ -17,6 +17,7 @@ public class KlondikeScreen extends JPanel {
     private JButton exitButton;
     private JButton undoButton;
     private JButton resetButton;
+    private JButton saveButton;
 
     private JLabel scoreLabel;
     private JLabel timerLabel;
@@ -24,6 +25,8 @@ public class KlondikeScreen extends JPanel {
     private KlondikeCardPane cardPane;
 
     private Sound player;
+
+    private Timer timer;
 
     public KlondikeScreen() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -101,6 +104,8 @@ public class KlondikeScreen extends JPanel {
                     resetGame();
             }
         });
+
+        saveButton = new JButton();
     }
 
     public void exitButton(ActionListener actionListener) {
@@ -155,7 +160,7 @@ public class KlondikeScreen extends JPanel {
                         "Final score: " + scoreLabel.getText() + '\n' +
                         "Time: " + timerLabel.getText();
 
-                Timer timer = new Timer(100, e -> {
+                timer = new Timer(100, e -> {
                     int option = JOptionPane.showOptionDialog(cardPane,
                             endMessage,
                             "Game Won!",
@@ -166,8 +171,14 @@ public class KlondikeScreen extends JPanel {
                             options[0]); //default button title
 
                     switch (option) {
-                        case 0, JOptionPane.CLOSED_OPTION -> exitButton.doClick();
-                        case 1 -> resetButton.doClick();
+                        case 0, JOptionPane.CLOSED_OPTION -> {
+                            saveButton.doClick();
+                            exitButton.doClick();
+                        }
+                        case 1 -> {
+                            saveButton.doClick();
+                            resetButton.doClick();
+                        }
                     }
                 });
 
@@ -177,5 +188,13 @@ public class KlondikeScreen extends JPanel {
         });
 
         validate();
+    }
+
+    public int getScore() {
+        return Integer.parseInt(this.scoreLabel.getText().split(" ")[1]);
+    }
+
+    public void saveResult(ActionListener actionListener) {
+        saveButton.addActionListener(actionListener);
     }
 }

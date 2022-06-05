@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class  Database {
     // saves user to database file
@@ -24,23 +25,31 @@ public class  Database {
     public List<Score> loadScores() throws IOException {
         String text = getScoresString();
 
-        try {
+        try{
             return Arrays.stream(text.split(" ")).map(x -> x.split(",")).map(x -> new Score(Integer.parseInt(x[1]), x[0])).toList();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             return new ArrayList<>();
         }
     }
 
     // reads user from database file
     private String getScoresString() throws IOException {
-        String command = "curl \\\n" +
-                "  -H \"Accept: application/vnd.github.v3+json\" \\\n" +
-                "  https://api.github.com/gists/" + DataConstants.GIST_ID + "\n";
-        Process process = Runtime.getRuntime().exec(command);
-        String json = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        HttpURLConnection http = (HttpURLConnection)url.openConnection();
+        http.setRequestProperty("Content-Type", "application/json");
+        http.setRequestProperty("Authorization", "token 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");
+        BufferedReader br = null;
+        if (100 <= http.getResponseCode() && http.getResponseCode() <= 399) {
+            br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+        } else {
+            br = new BufferedReader(new InputStreamReader(http.getErrorStream()));
+        }
 
-        Pattern r = Pattern.compile("\"content\": \"([\\w \\n\\t\\,\\\\]+)\"");
-        Matcher m = r.matcher(json);
+        String str = br.lines().collect(Collectors.joining());;
+        http.disconnect();
+
+        Pattern r = Pattern.compile("\"content\":\"([\\w \\n\\t\\,\\\\\\.]+)\"");
+        Matcher m = r.matcher(str);
 
         if (m.find()) {
             return m.group(1);
@@ -50,12 +59,13 @@ public class  Database {
     }
 
     private void sendNewData(String newContent) throws IOException {
-        URL url = new URL("https://api.github.com/gists/" + DataConstants.GIST_ID);
-        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        HttpURLConnection http = (HttpURLConnection)url.openConnection();
+        http.setRequestProperty("X-HTTP-Method-Override", "PATCH");
         http.setRequestMethod("POST");
         http.setDoOutput(true);
         http.setRequestProperty("Content-Type", "application/json");
-        http.setRequestProperty("Authorization", "token " + DataConstants.GITHUB_TOKEN);
+        http.setRequestProperty("Authorization", "token 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");
 
         String data = "{\n  \"files\": {\n    \"data.txt\": {\n      \"content\": \"" + newContent + "\"\n    }\n  }\n}";
 
@@ -64,6 +74,7 @@ public class  Database {
         OutputStream stream = http.getOutputStream();
         stream.write(out);
 
+        System.out.println(http.getResponseCode() + " " + http.getResponseMessage());
         http.disconnect();
     }
 }
