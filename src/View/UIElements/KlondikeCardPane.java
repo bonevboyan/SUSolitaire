@@ -50,7 +50,7 @@ public class KlondikeCardPane extends JLayeredPane {
             pileCards.add(new ArrayList<>());
             int counter = 0;
             for (Card card : pile.getCards()) {
-                JCard jCard = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 20), card, pilePanel);
+                JCard jCard = new JCard(new Point(pilePanel.getX(), pilePanel.getY() + counter * 25), card, pilePanel);
                 add(jCard);
                 moveCard(jCard, jCard.getLocation());
                 counter++;
@@ -277,8 +277,8 @@ public class KlondikeCardPane extends JLayeredPane {
 
         //PilePanel pilePanel = pilePanels.get(pileIndex);
         if (dropLocation instanceof PilePanel dropPile) {
+            card.setLocation(dropPile.getX() + 10, dropPile.getY() + dropPile.getCardAmount() * 25);
             dropPile.incrementCardAmount(1);
-            card.setLocation(dropPile.getX() + 10, dropPile.getY() + dropPile.getCardAmount() * 20);
             pileCards.get(Objects.requireNonNull(getStackInfo(dropPile)).getIndex()).add(card);
         } else {
             card.setLocation(dropLocation.getX() + 10, dropLocation.getY() + 10);

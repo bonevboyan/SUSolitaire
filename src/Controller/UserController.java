@@ -24,7 +24,7 @@ public class UserController {
 
         // submit user
         this.startMenu.submitUsers(e -> {
-            String username = this.startMenu.getUsername().trim();
+            String username = this.startMenu.getUsername().trim().replaceAll("[ ,]", "");
 
             if (username.isEmpty()) {
                 username = "guest" + (int) Math.ceil(Math.random() * 100);
