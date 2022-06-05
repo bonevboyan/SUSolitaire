@@ -34,10 +34,10 @@ public class  Database {
 
     // reads user from database file
     private String getScoresString() throws IOException {
-        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        URL url = new URL("https://api.github.com/gists/" + DataConstants.GIST_ID);
         HttpURLConnection http = (HttpURLConnection)url.openConnection();
         http.setRequestProperty("Content-Type", "application/json");
-        http.setRequestProperty("Authorization", "token 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");
+        http.setRequestProperty("Authorization", "token " + DataConstants.GITHUB_TOKEN);
         BufferedReader br = null;
         if (100 <= http.getResponseCode() && http.getResponseCode() <= 399) {
             br = new BufferedReader(new InputStreamReader(http.getInputStream()));
@@ -59,13 +59,13 @@ public class  Database {
     }
 
     private void sendNewData(String newContent) throws IOException {
-        URL url = new URL("https://api.github.com/gists/f9d3cc78d23b70a7952c2bce04c0d2d9");
+        URL url = new URL("https://api.github.com/gists/" + DataConstants.GIST_ID);
         HttpURLConnection http = (HttpURLConnection)url.openConnection();
         http.setRequestProperty("X-HTTP-Method-Override", "PATCH");
         http.setRequestMethod("POST");
         http.setDoOutput(true);
         http.setRequestProperty("Content-Type", "application/json");
-        http.setRequestProperty("Authorization", "token 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");
+        http.setRequestProperty("Authorization", "token " + DataConstants.GITHUB_TOKEN);
 
         String data = "{\n  \"files\": {\n    \"data.txt\": {\n      \"content\": \"" + newContent + "\"\n    }\n  }\n}";
 

@@ -119,6 +119,7 @@ public class StartMenu extends JPanel {
 
     public void topScores(List<Score> scores) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) topScores.getModel();
+        defaultTableModel.setRowCount(0);
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
         for (Score score : scores) {

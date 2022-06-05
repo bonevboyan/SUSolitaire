@@ -6,6 +6,9 @@ import View.Layouts.StartMenu;
 import View.Layouts.UserDetails;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class UserController {
     private UserService userService;
@@ -42,6 +45,13 @@ public class UserController {
             int score = klondikeScreen.getScore();
 
             this.userService.sendResult(score);
+        });
+
+        this.startMenu.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                startMenu.topScores(userService.topScores());
+            }
         });
     }
 
