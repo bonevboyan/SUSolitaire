@@ -21,13 +21,18 @@ public class UserDetails extends JPanel {
     public UserDetails() {
         // uses box layout
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setBorder(BorderFactory.createLineBorder(new Color(0, 81, 0), 30));
         // toolbar for buttons
         JToolBar toolBar = new JToolBar();
+
+        // users table
         userTable = new JTable();
+        userTable.setDefaultEditor(Object.class, null);
         // scroll bar for table
         JScrollPane userTableScroll = new JScrollPane(userTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         backButton = new JButton("Go Back");
+        toolBar.setFloatable(false);
         add(toolBar);
         toolBar.add(backButton);
         toolBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, toolBar.getMinimumSize().height));
@@ -38,6 +43,7 @@ public class UserDetails extends JPanel {
     // gets users from database and loads to table
     public void getUsers(List<Score> scores) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) userTable.getModel();
+        defaultTableModel.setRowCount(0);
         defaultTableModel.setColumnIdentifiers(userTableColumn);
 
         for (int i = 0; i < scores.size(); i++) {

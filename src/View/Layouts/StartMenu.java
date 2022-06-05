@@ -31,6 +31,7 @@ public class StartMenu extends JPanel {
 
         usernameField = new JPlaceholderTextField(25);
         topScores = new JTable();
+        topScores.setDefaultEditor(Object.class, null);
 
         //initialize buttons
         playButton = new JButton("Play");
