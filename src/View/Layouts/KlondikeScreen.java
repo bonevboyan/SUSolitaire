@@ -175,6 +175,7 @@ public class KlondikeScreen extends JPanel {
 
                     switch (option) {
                         case 0, JOptionPane.CLOSED_OPTION -> {
+                            resetGame();
                             saveButton.doClick();
                             exitButton.doClick();
                         }
