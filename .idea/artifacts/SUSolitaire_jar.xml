@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SUSolitaire:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SUSolitaire_jar</output-path>
+    <root id="archive" name="SUSolitaire.jar">
+      <element id="module-output" name="SUSolitaire" />
+    </root>
+  </artifact>
+</component>
